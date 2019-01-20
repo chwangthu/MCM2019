@@ -1,4 +1,4 @@
-This is XeTeX, Version 3.14159265-2.6-0.99999 (TeX Live 2018) (preloaded format=xelatex 2018.11.2)  20 JAN 2019 13:32
+This is XeTeX, Version 3.14159265-2.6-0.99999 (TeX Live 2018) (preloaded format=xelatex 2018.11.2)  20 JAN 2019 13:38
 entering extended mode
  restricted \write18 enabled.
  file:line:error style messages enabled.
@@ -600,15 +600,19 @@ LaTeX Font Info:    Font shape `T1/ppl/bx/n' in size <12> not available
  [2]
 File: ./figures/mcmthesis-aaa.eps Graphic file (type eps)
 <./figures/mcmthesis-aaa.eps>
- [3] [4] [5]
-LaTeX Font Info:    Try loading font information for T1+pcr on input line 172.
+
+
+LaTeX Warning: `h' float specifier changed to `ht'.
+
+[3] [4] [5]
+LaTeX Font Info:    Try loading font information for T1+pcr on input line 187.
  (/usr/local/texlive/2018/texmf-dist/tex/latex/psnfss/t1pcr.fd
 File: t1pcr.fd 2001/06/04 font definitions for T1/pcr.
 )
 LaTeX Font Info:    Font shape `T1/ppl/bx/n' in size <20.74> not available
-(Font)              Font shape `T1/ppl/b/n' tried instead on input line 176.
+(Font)              Font shape `T1/ppl/b/n' tried instead on input line 191.
  [6]
-Underfull \hbox (badness 10000) in paragraph at lines 182--183
+Underfull \hbox (badness 10000) in paragraph at lines 197--198
 
  []
 
@@ -618,18 +622,22 @@ LaTeX Font Info:    Font shape `T1/pcr/bx/n' in size <9> not available
 ) (./code/mcmthesis-sudoku.cpp [7]) 
 AED: lastpage setting LastPage
 [8]
-Package atveryend Info: Empty hook `BeforeClearDocument' on input line 193.
-Package atveryend Info: Empty hook `AfterLastShipout' on input line 193.
+Package atveryend Info: Empty hook `BeforeClearDocument' on input line 208.
+Package atveryend Info: Empty hook `AfterLastShipout' on input line 208.
  (./mcmthesis-demo.aux)
-Package atveryend Info: Empty hook `AtVeryEndDocument' on input line 193.
-Package atveryend Info: Executing hook `AtEndAfterFileList' on input line 193.
+Package atveryend Info: Empty hook `AtVeryEndDocument' on input line 208.
+Package atveryend Info: Executing hook `AtEndAfterFileList' on input line 208.
 Package rerunfilecheck Info: File `mcmthesis-demo.out' has not changed.
 (rerunfilecheck)             Checksum: 71A34E322FFE6108367C3F2DC2250086.
+
+
+LaTeX Warning: Label(s) may have changed. Rerun to get cross-references right.
+
  ) 
 Here is how much of TeX's memory you used:
  14099 strings out of 492970
  193973 string characters out of 6133938
- 457587 words of memory out of 5000000
+ 454220 words of memory out of 5000000
  17825 multiletter control sequences out of 15000+600000
  44461 words of font info for 111 fonts, out of 8000000 for 9000
  1348 hyphenation exceptions out of 8191
