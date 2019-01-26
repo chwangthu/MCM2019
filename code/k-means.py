@@ -79,6 +79,7 @@ def kmeans(dataSet, k):
             centroids[j, :] = mean(pointsInCluster, axis = 0)
  
     print('Congratulations, cluster complete!')
+    print(centroids)
     return centroids, clusterAssment, res
  
 # show your cluster only available with 2-D data
@@ -134,3 +135,18 @@ for i in range(len(res)):
 ## step 3: show the result
 # print("step 3: show the result...")
 # showCluster(dataSet, k, centroids, clusterAssment)
+
+import xlwt
+workbook = xlwt.Workbook()
+worksheet = workbook.add_sheet("cluster")
+worksheet.write(0, 1, "FIPS_Combined")
+worksheet.write(0, 2, "cluster")
+worksheet.write(0, 3, "latitude")
+worksheet.write(0, 4, "longitude")
+for i in range(len(res)):
+    worksheet.write(i+1, 0, i)
+    worksheet.write(i+1, 1, county_id[i])
+    worksheet.write(i+1, 2, int(res[i][0]))
+    worksheet.write(i+1, 3, centroids[int(res[i][0])][0])
+    worksheet.write(i+1, 4, centroids[int(res[i][0])][1])
+workbook.save("../data/cluster.xls")
