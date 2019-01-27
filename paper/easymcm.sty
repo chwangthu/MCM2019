@@ -21,18 +21,28 @@
 \RequirePackage{ifthen}                     % 逻辑结构宏包（仅模板文件用到）
 \RequirePackage{lastpage}                   % 获得最后一面页码的宏包（生成"Page X of XX"）
 \RequirePackage{paralist}                   % 用以修改itemize各项间距的宏包
+\RequirePackage{xcolor}
 
 %=========附录代码==========
 \RequirePackage{listings}       % 代码环境宏包
 \RequirePackage[toc,page,title,titletoc,header]{appendix} % 附录制作宏包
-\lstset{% 代码抄录环境的设置
-	tabsize=4,%
-    frame=lines,%
-	basicstyle={\footnotesize\ttfamily},%
-    keywordstyle=\bfseries,%
-    commentstyle=\color{gray},%
-    aboveskip=10pt,%
-    belowskip=2pt,%
+\definecolor{vgreen}{RGB}{104,180,104}
+\definecolor{vblue}{RGB}{49,49,255}
+\definecolor{vorange}{RGB}{255,143,102}
+\lstset
+{
+	basicstyle={\footnotesize\ttfamily},        % set code style
+	keywordstyle=\color{vblue},
+	identifierstyle=\color{black},
+	commentstyle=\color{vgreen},
+	% numbers=left,                      % set line numbers
+	numberstyle={\tiny \color{black}}, % set fonts of line numbers
+	frame=lines,                      % set type of open 
+	numbersep=10pt,
+	breaklines=true,                   % automatic line break
+    tabsize=4,
+    aboveskip=10pt,
+    belowskip=2pt
 }
 
 %========设置上下文间距========

@@ -6,10 +6,12 @@
 \documentclass[12pt]{article}
 
 % 请在此填写控制号、题号和标题，年份不需要填（自动以当前电脑时间年份为准）
-\usepackage[1923231]{easymcm}\problem{A}   
+\usepackage[1923231]{easymcm}\problem{C}   
 \usepackage{palatino} % 这个是COMAP官方杂志采用的字体，如不需要可注释掉，以使用默认字体
-\title{An MCM Paper Made by Team 1234567}  % 标题
 
+\title{\large God or evil? A ... model analysing and predicting opioid use}  % 标题
+\setlength\parindent{0pt} %default no indent
+\newcommand{\upcite}[1]{\textsuperscript{\textsuperscript{\cite{#1}}}}
 % 如您参加的是ICM（即选择了D/E/F题），请使用以下的命令修改Summary Sheet题头
 % \renewcommand{\contest}{Interdisciplinary Contest in Modeling (ICM) Summary Sheet}
 
@@ -17,18 +19,17 @@
 \begin{document}
 \input{ABSTRACT.tex}		% 摘要请到ABSTRACT.tex中填写
 
+\section*{\centering Memo}
+\newpage
+
 \section{Introduction}
 \subsection{Problem Background}
-Here is the problem background ...
+Opioids, no matter synthetic ones or non-synthetic ones, play an significant role in our daily life. The proper utilization of opioids helps thousands of people get relieved from their pains. However, misuse of them can really destroy the society. Therefore, it is essential and urgent to gain a better understanding of opioids' spread and influencing factors.
 
-Two major problems are discussed in this paper, which are:
-\begin{itemize}
-    \item Doing the first thing.
-    \item Doing the second thing.
-\end{itemize}
+Recent years have witnessed the tremendous growth of opioids cases. How this trend will develop remains an national concern. With data of annual drug use and socio-economic factors in five U.S. states over the past few years, we perform data mining and construct a model to figure out the pattern of opioids use and what contributes to it.
 
-\subsection{Literature Review}
-A literatrue\cite{1} say something about this problem ...
+% \subsection{Literature Review}
+% A literatrue\upcite{1} say something about this problem ...
 
 \subsection{Our work}
 We do such things ...
@@ -39,8 +40,12 @@ We do such things ...
     \item We do ...
 \end{enumerate}
 
-\section{Preparation of the Models}
+\section{Assumptions and Nomenclature}
 \subsection{Assumptions}
+Given the lack of data and limitation of our knowledge, we made the following assumption:
+\begin{itemize}
+    \item
+\end{itemize}
 
 \subsection{Notations}
 The primary notations used in this paper are listed in \textbf{Table \ref{tb:notation}}.
@@ -60,6 +65,19 @@ The primary notations used in this paper are listed in \textbf{Table \ref{tb:not
 \end{center}
 \end{table}
 
+\section{Data Processing}
+We are provided with two types of data, the number of drug reports in categories and socio-economic factors. Both of them are specific to counties. The original data contains a lot of redundant and invalid items, which can seriously affect the accuracy and versatility of our model. Thereby, we first apply some data processing techniques before we construct the model.
+\subsection{Missing Data Processing}
+% In US, each county is assigned a unique five-digit code called FIPS county code. 
+In the worksheet about socio-economic factors, there are many cells that contain no valid information at all. We delete columns and rows which contains a lot of useless cells. For other columns and rows, when invalid items appear, we replace it with the average value of the entire sequence.
+
+\subsection{Clustering}
+Since we have detailed number of drug reports, it is not hard to fit a curve to observe the trend of opioid use for each state and for each county. However, we consider this method inappropriate. On the one hand, the sample for only one county is normally fluctuating irregularly, i.e. drug reports of heroin in ACCOMACK, VA was 2, 38, 6 during 2012-2014. It is unnecessary and meaningless to bulid a model when facing such fluctuation. On the other hand, the trend of drug reports in the five states is not obvious. This can be seen in the figure below. %TODO: Add figure
+
+Considering that state and county are not suitable for our research, we decide to introduce a unit in between. We put counties on a two-dimensional plane and regard them as nodes. Then, k-means clustering method\upcite{1}, which aims to partion nodes into k clusters minimizing the within-cluster sum of squares, was performed. In our case, we take $k = 10$. The distance of two counties can be computed with their latitude and longtitude retrieved from U.S. Census Bureau\upcite{2}. %TODO: Add cluster figure
+
+\subsection{}
+
 \section{The Models}
 \subsection{Model 1}
 \subsubsection{Detail 1 about Model 1}
@@ -70,30 +88,36 @@ The primary notations used in this paper are listed in \textbf{Table \ref{tb:not
 \section{Strengths and Weaknesses}
 \subsection{Strengths}
 \begin{itemize}
-    \item First one...
-    \item Second one ...
+    \item Our model takes the idea of clustering, which overcomes the difficulty of analysing either the whole state or one single county.
+    \item We take several measures to process the dataset and make it convenient for use, while the authenticity and integrity of data is still maintained.
 \end{itemize}
 
 \subsection{Weaknesses}
 \begin{itemize}
-    \item Only one ...
+    \item Nothing yet
  \end{itemize}
 
 \begin{thebibliography}{99}
 \addcontentsline{toc}{section}{References}  %引用部分标题（"Refenrence"）的重命名
-\bibitem{1}Elisa T. Lee, Oscar T. Survival Analysis in Public Health Research. \emph{Go. College of Public Health}, 1997(18):105-134.
-\bibitem{2}Wikipedia: Proportional hazards model. 2017.11.26. \texttt{\\https://en.wikipedia.org/wiki/Proportional\_{}hazards\_{}model}
+\bibitem{2}Gazetteer Files - Geography - U.S. Census Bureau. \texttt{\\https://www.census.gov/geo/maps-data/data/gazetteer.html}
+% \bibitem{3}Elisa T. Lee, Oscar T. Survival Analysis in Public Health Research. \emph{Go. College of Public Health}, 1997(18):105-134.
+\bibitem{1}MacQueen, J. (1967, June). Some methods for classification and analysis of multivariate observations. In Proceedings of the fifth Berkeley symposium on mathematical statistics and probability (Vol. 1, No. 14, pp. 281-297).
+\bibitem{3}DrugBank. \texttt{https://www.drugbank.ca/drug}
 \end{thebibliography}
 
 
 % ==============以下为附录内容，如您的论文中不需要程序附录请自行删除====================
 \clearpage
 \begin{subappendices}						% 附录环境
-\section*{Apendix: The source codes}		% 附录标题可以自行修改
+\section*{Apendix: The Source Codes}		% 附录标题可以自行修改
 \addcontentsline{toc}{section}{Appendix}  	% 将附录内容加入到目录中
 
+This python program implements k-means clustering.
+\lstinputlisting[language={python}, caption=\texttt{k-means.py}]{../code/k-means.py}
+% \inputpython{../code/k-means.py}{0}{68}
+
 This MATLAB program is used to calculate the value of variable $a$.
-\begin{lstlisting}[language=Matlab, caption=\texttt{temp.m}]
+\begin{lstlisting}[language={Matlab}, caption=\texttt{temp.m}]
 a = 0;
 for i = 1:5
 	a = a + 1;
@@ -118,6 +142,7 @@ end
 
 \textbf{\textcolor[rgb]{0.98,0.00,0.00}{Input matlab source:}}
 \lstinputlisting[language=Matlab]{../code/matlab-test.m}
+
 \end{subappendices}
 % =================================================================================
 
