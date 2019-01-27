@@ -8,6 +8,7 @@
 % 请在此填写控制号、题号和标题，年份不需要填（自动以当前电脑时间年份为准）
 \usepackage[1923231]{easymcm}\problem{C}   
 \usepackage{palatino} % 这个是COMAP官方杂志采用的字体，如不需要可注释掉，以使用默认字体
+\usepackage{subfigure}
 
 \title{\large God or evil? A ... model analysing and predicting opioid use}  % 标题
 \setlength\parindent{0pt} %default no indent
@@ -19,7 +20,7 @@
 \begin{document}
 \input{ABSTRACT.tex}		% 摘要请到ABSTRACT.tex中填写
 
-\section*{\centering Memo}
+\section*{Memo}
 \newpage
 
 \section{Introduction}
@@ -44,7 +45,7 @@ We do such things ...
 \subsection{Assumptions}
 Given the lack of data and limitation of our knowledge, we made the following assumption:
 \begin{itemize}
-    \item
+    \item We assume that the data after processing is robust for futher use.
 \end{itemize}
 
 \subsection{Notations}
@@ -71,12 +72,41 @@ We are provided with two types of data, the number of drug reports in categories
 % In US, each county is assigned a unique five-digit code called FIPS county code. 
 In the worksheet about socio-economic factors, there are many cells that contain no valid information at all. We delete columns and rows which contains a lot of useless cells. For other columns and rows, when invalid items appear, we replace it with the average value of the entire sequence.
 
-\subsection{Clustering}
-Since we have detailed number of drug reports, it is not hard to fit a curve to observe the trend of opioid use for each state and for each county. However, we consider this method inappropriate. On the one hand, the sample for only one county is normally fluctuating irregularly, i.e. drug reports of heroin in ACCOMACK, VA was 2, 38, 6 during 2012-2014. It is unnecessary and meaningless to bulid a model when facing such fluctuation. On the other hand, the trend of drug reports in the five states is not obvious. This can be seen in the figure below. %TODO: Add figure
+\subsection{Clustering Counties of Five States}
+Since we have detailed number of drug reports, it is not hard to fit a curve to observe the trend of opioid use for each state and for each county. However, we consider this method inappropriate. On the one hand, the sample for only one county is normally fluctuating irregularly, i.e. drug reports of heroin in ACCOMACK, VA was 2, 38, 6 during 2012-2014. It is unnecessary and meaningless to bulid a model when facing such fluctuation. On the other hand, given the large number of all kinds of opioids, even one type change significantly, it is not obvious when viewed as the level of the whole state.
 
-Considering that state and county are not suitable for our research, we decide to introduce a unit in between. We put counties on a two-dimensional plane and regard them as nodes. Then, k-means clustering method\upcite{1}, which aims to partion nodes into k clusters minimizing the within-cluster sum of squares, was performed. In our case, we take $k = 10$. The distance of two counties can be computed with their latitude and longtitude retrieved from U.S. Census Bureau\upcite{2}. %TODO: Add cluster figure
+% \begin{figure}[htbp]
+% \centering        %居中
+% \subfigure[name of the subfigure]{ %第一张子图
+% 	\begin{minipage}{7cm}\centering   %子图居中
+% 		\includegraphics[scale=0.5]{./figures/1.png}  %以pic.jpg的0.5倍大小输出
+% 	\end{minipage}}
+% \subfigure[name of the subfigure]{ %第二张子图
+% 	\begin{minipage}{7cm}\centering %子图居中
+% 		\includegraphics[scale=0.3]{./figures/2.png}  %以pic.jpg的0.5倍大小输出
+% 	\end{minipage}}
+% \caption{name of the figure} %%大图名称
+% \label{fig:1} %图片引用标记
+% \end{figure}
 
-\subsection{}
+Considering that state and county are not suitable for our research, a unit in between is introduced. We put counties on a two-dimensional plane and regard them as nodes. Then, k-means clustering method\upcite{1}, which aims to partion nodes into k clusters minimizing the within-cluster sum of squares, was performed. In our case, we take $k = 10$. The distance of two counties can be computed with their latitude and longtitude retrieved from U.S. Census Bureau\upcite{2}. %TODO: Add cluster figure
+
+\subsection{Combine Indexes of a Socio-economic Factor}
+For every year from 2010 to 2016, there are a list of indexes about one single socio-economic factor. For instance, factor ANCERSTRY includes estimate, estimate margin of error, percent, etc. Those indexes all reflect some information of the target factor in some aspects, hence how to rank their importance matters. 
+
+In information theory, entropy represents the information a sequence contains\upcite{3}. So Entropy Weight Method (EWM), which gives each index a weight according to their entropy, is chosen to measure the significance of each index. Before that, we normalize the data given using the following equation.
+\begin{equation}
+	y_{i} = \frac{x_{i}-min(x_{i})}{max(x_{i}) - min(x_{i})}
+\end{equation}
+where $x_{i}$ and $y_{i}$ denotes the original sequence and processed sequence.
+
+We apply EWM in the way addressed as follows (Using ANCERSTRY as an example):
+\begin{itemize}
+	\item Define Estimate, Estimate margin of error, Percent, Percent margin of error of ANCERSTRY is defined as $y_{j}$ ($y_{1}$ means Estimate...). Compute entropy for $y_{j}$: $ E_{j} = -\frac{\sum p_{i}lnp_{i}}{ln(n)}$, where $p_{i}=\frac{y_{ji}}{\sum_{i} y_{ji}}$, $E_{j}$ represents the entropy for each index.
+	\item Compute weight for Estimate, Estimate margin of error, Percent, Percent margin of error of ANCERSTRY: $ W_{j} = \frac{E_{j}}{\sum E_{j}}$, where $W_{j}$ represents the weight for each index.
+	\item Combine indexes using the weight: $y'_{i} = \sum_{j} W_{j} * y_{ji}$
+\end{itemize}
+So far, we have combined several indexes of a factor into one $y'_{i}$, and the same can be done to other factors. The newly generated sequence will be reserved for further analysis.
 
 \section{The Models}
 \subsection{Model 1}
@@ -99,10 +129,10 @@ Considering that state and county are not suitable for our research, we decide t
 
 \begin{thebibliography}{99}
 \addcontentsline{toc}{section}{References}  %引用部分标题（"Refenrence"）的重命名
-\bibitem{2}Gazetteer Files - Geography - U.S. Census Bureau. \texttt{\\https://www.census.gov/geo/maps-data/data/gazetteer.html}
-% \bibitem{3}Elisa T. Lee, Oscar T. Survival Analysis in Public Health Research. \emph{Go. College of Public Health}, 1997(18):105-134.
 \bibitem{1}MacQueen, J. (1967, June). Some methods for classification and analysis of multivariate observations. In Proceedings of the fifth Berkeley symposium on mathematical statistics and probability (Vol. 1, No. 14, pp. 281-297).
-\bibitem{3}DrugBank. \texttt{https://www.drugbank.ca/drug}
+\bibitem{2}Gazetteer Files - Geography - U.S. Census Bureau. \texttt{\\https://www.census.gov/geo/maps-data/data/gazetteer.html}
+\bibitem{3}Shannon, C. E. (1948). A mathematical theory of communication. Bell system technical journal, 27(3), 379-423.
+\bibitem{4}DrugBank. \texttt{https://www.drugbank.ca/drug}
 \end{thebibliography}
 
 
@@ -141,7 +171,7 @@ end
 \end{lstlisting}
 
 \textbf{\textcolor[rgb]{0.98,0.00,0.00}{Input matlab source:}}
-\lstinputlisting[language=Matlab]{../code/matlab-test.m}
+% \lstinputlisting[language=Matlab]{../code/matlab-test.m}
 
 \end{subappendices}
 % =================================================================================
