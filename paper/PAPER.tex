@@ -3,7 +3,7 @@
 %          PAPER.tex         
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
-\documentclass[11pt]{article}
+\documentclass[12pt]{article}
 
 % 请在此填写控制号、题号和标题，年份不需要填（自动以当前电脑时间年份为准）
 \usepackage[1923231]{easymcm}\problem{C}   
@@ -24,6 +24,18 @@
 \input{ABSTRACT.tex}		% 摘要请到ABSTRACT.tex中填写
 
 \section*{Memo}
+\addcontentsline{toc}{section}{Memo}
+\textbf{To:} Chief Administrator, NFLIS, DEA \newline
+\textbf{From:} A Group of Modelers \newline
+\textbf{Subject:} Insights and Results During Modeling\newline
+\textbf{Date:} Jan 28, 2019\newline
+\noindent\rule{\textwidth}{0.8pt}
+\indent \textbf{Intention}\newline
+The misuse of opioids has become an national crisis, hence it is urgent to fight against it. Using the dataset provided by your apartment, we aim to address the insights and recommendations for you.
+
+\indent \textbf{Insights}\newline
+
+\indent \textbf{Our Recommendations}\newline
 \newpage
 
 \section{Introduction}
@@ -32,27 +44,32 @@ Opioids, no matter synthetic ones or non-synthetic ones, play an significant rol
 
 Recent years have witnessed the tremendous growth of opioids cases. How this trend will develop remains an national concern. With data of annual drug use and socio-economic factors in five U.S. states over the past few years, we perform data mining and construct a model to figure out the pattern of opioids use and what contributes to it.
 
-% \subsection{Literature Review}
-% A literatrue\upcite{1} say something about this problem ...
+\subsection{Problem Statement and Analysis}
+The problem is about the opioid crisis in the U.S. society, which offering us a set of data ranging from 2010 to 2017.Our main task is to build models that enable us to identify the locations where specific opioid use started and describe the patterns and characteristics of opioid incidents spread. 
 
-\subsection{Our work}
-We do such things ...
+First, this is a typical data problem, so we should carefully preprocess the data provided. In the MCM\_NFLIS Data, there are 461 counties belongs to 5 states. For most of the counties, the drug reports are fluctuant, even with large amount of missing data. Besides if we combined all the drug reports of certain state, the start of specific opioid use of one county may be covered up by opioid use of other counties. Therefore, in order to increase the stability of patterns without losing the accuracy, we use the K-means algorithm to combine 461 counties into 10 clusters for our further modeling.
+While in the U.S. Census socio-economic data, there are about nearly 600 variables ranging from 2010 to 2017, which is too large to use in the model. We notice that every variable can be classified into certain category by its name, like “HOUSEHOLDS BY TYPE”, “MARITAL STATUS” and so on. It’s reasonably to use Entropy Weight Method to combine 596 variables into 15 factors.
 
-\begin{enumerate}[\bfseries 1.]
-    \item We do ...
-    \item We do ...
-    \item We do ...
-\end{enumerate}
+Second, in the early development stage of the heroin incidents, we think such incidents can be treat as  individual events and the interaction between different states has not yet been formed. So we use the Logistic Model to describe the initial trend of heroin incidents. Through the Logistic Model, we can also get the maximum number of each cluster, which will be used in the next part to determine the threshold levels.
 
+Third, with the spread of incidents, states may start interact with each other and a stable environmental condition for the Logistic Model is no longer met. Therefore, we use the Lotka-Volterra Model to model the spread and characteristics of the reported incidents and forecast the future trend of the heroin incidents. Then we use the Modified Lotka-Volterra Model by adding different factors.
+Finally, the Modified Lotka-Volterra Model can provide us both the relationships between clusters and the influence of different factors. By taking all these factors into account, we can identify a possible strategy for countering the opioid crisis and test the effectiveness of this strategy by our model.
+
+
+\section{Assumptions and Notations}
 \subsection{Assumptions}
-Given the lack of data and limitation of our knowledge, we made the following assumption:
+Given the lack of necessary data and limitation of our knowledge, we made the following assumptions to help us perform modeling. These assumptions are the premise for our subsequent analysis:
 \begin{itemize}
-    \item We assume that the data after processing is robust for futher use.
+	\item The data after our process are correct and robust for our further analysis.
+	\item For the early development stage of the heroin accidents, we assume the incidents growth rate of certain cluster is determined only by itself and the environmental remains stable. So we use the Logistic Model to describe the initial trend of heroin incidents.
+	\item The policy of each state will not change in the future. Because policy change will greatly influence the interaction between clusters and the influence of factors, it’s essential for us to assume the policy remain unchanged.
+	\item The influence of the factors to heroin incidents remain unchanged and the factors of each clusters grow linearly.
 \end{itemize}
 
 \section{Notations}
-The primary notations used in this paper are listed in \textbf{Table \ref{tb:notation}}.
+The primary notations used in this paper are listed in Table \ref{tb:notation}.
 \begin{table}[!htbp]
+\small
 \begin{center}
 \caption{Notations}
 \begin{tabular}{cc}
@@ -60,9 +77,11 @@ The primary notations used in this paper are listed in \textbf{Table \ref{tb:not
 	\multicolumn{1}{m{3cm}}{\centering Symbol}
 	&\multicolumn{1}{m{8cm}}{\centering Definition}\\
 	\midrule
-	$A$&the first one\\
-	$b$&the second one\\
-	$\alpha$ &the last one\\
+	$u_{k}(t)$ &Drug reports of Cluster-k at time t\\
+	$ K $ & Upper Bound of Drug Use \\
+	$X_{t}$ & Factors calculated by Entropy Weight Method\\
+	$a_{k}$ & The natural growth rate of Cluster-k\\
+	$b_{jk}$ & The influence factors of Cluster-k to the nature growth rate of Cluster-j\\
 	\bottomrule
 \end{tabular}\label{tb:notation}
 \end{center}
@@ -88,9 +107,9 @@ We apply EWM in the way addressed as follows (Using ANCERSTRY as an example):
 \begin{itemize}
 	\item Define Estimate, Estimate margin of error, Percent, Percent margin of error of ANCERSTRY is defined as $y_{j}$ ($y_{1}$ means Estimate...). Compute entropy for $y_{j}$: $ E_{j} = -\frac{\sum p_{i}lnp_{i}}{ln(n)}$, where $p_{i}=\frac{y_{ji}}{\sum_{i} y_{ji}}$, $E_{j}$ represents the entropy for each index.
 	\item Compute weight for Estimate, Estimate margin of error, Percent, Percent margin of error of ANCERSTRY: $ W_{j} = \frac{E_{j}}{\sum E_{j}}$, where $W_{j}$ represents the weight for each index.
-	\item Combine variables using the weight: $y'_{i} = \sum_{j} W_{j} * y_{ji}$
+	\item Combine variables using the weight: $X_{i} = \sum_{j} W_{j} * y_{ji}$
 \end{itemize}
-So far, we have combined several variables of a factor into one $y'_{i}$, and the same can be done to other factors. The newly generated sequence will be reserved for further analysis.
+So far, we have combined several variables of a factor into one $X_{i}$, and the same can be done to other factors. The newly generated sequence will be reserved for further analysis.
 
 \subsection{Cluster Counties of Five States}
 Since we have detailed number of drug reports, it is not hard to fit a curve to observe the trend of opioid use for each state and for each county. However, we consider this method inappropriate. On the one hand, the sample for only one county is normally fluctuating irregularly, i.e. drug reports of heroin in ACCOMACK, VA was 2, 38, 6 during 2012-2014. It is unnecessary and meaningless to bulid a model when facing such fluctuation. On the other hand, given the large number of all kinds of opioids, even one type change significantly, it is not obvious when viewed as the level of the whole state.
@@ -106,6 +125,7 @@ Considering that state and county are not suitable for our research, a unit in b
 \subsection{Data Screening -- Drug Classification}
 In order to describe the dissemination and characteristics of the synthetic opioids and heroin spread sperately, we need to screen the information in MCM\_NFLIS\_Data.xlsx. By consulting Wikipedia, DrugBank\upcite{4} and other websites, provided drugs are roughly classified into synthetic opioids, semi-synthetic opioids, and natural ingredients(Table \ref{opioid kind}). In view of the topic requirements, we excluded the natural ingredients and drugs other than heroin in semi-synthetic opioids, leaving the drug reports of heroin and synthetic opioids only. As for the synthetic opioid, we find that many drugs have been used in small amounts over the years compared to those used in large numbers. And some drugs only start to appear in the past two years, so we can just ignore them. Finally, we leave about 15 kinds of synthetic drugs that have appeared since 2010 for further research.
 \begin{table}[H]
+	\small
 	\centering
 	\caption{Opioids and Their Kind}
 	\begin{tabular}{c|l}
@@ -127,7 +147,7 @@ In order to describe the dissemination and characteristics of the synthetic opio
 \subsubsection{Model Establishment}
 With the K-means cluster analysis, we acquire data about the synthetic opioid and heroin events in ten clusters. It is clear to identify that the drug use levels in most areas are increasing. If drug use continues to grow at such speed, it will bring about numerous negative effects to the society when it exceeds an certain level, as mentioned in the Problem Background. Therefore, government’s relevant departments, including the Drug Enforcement Administration(DEA), will take corresponding measures to control the growing trend of drug use. However, when consumptions reach a high level, the growing rate in usage will reduce. And it is gradually increasing when consumptions are low.
 
-This regular drug-use pattern is consistent with the Logistic model of population growth, in which the natural growth rate of the population will be limited by the population. Similarly, the drug-use will be limited by many restrictions including social factors such as government control and natural factors such as population growth. Assuming that drug-use level could be affected by these factors and thus having a ceiling, it can be considered that the growth trend of synthetic opioid and heroin events are subordinated to the Logistic model. Here’s the Logistic model:
+The regular drug-use pattern is identical to the Logistic model of population growth, in which the natural growth rate of the population will be limited by the population. Similarly, the drug-use will be limited by many restrictions including social factors such as government control and natural factors such as population growth. Assuming that drug-use level could be affected by these factors and thus having a ceiling, it can be considered that the growth trend of synthetic opioid and heroin events are subordinated to the Logistic model. Here’s the Logistic model:
 \begin{equation}
 	\begin{split}
 	\frac{dN(t)}{dt} = r&(1-\frac{N(t)}{K})N(t) \label{logistic}\\
@@ -135,11 +155,11 @@ This regular drug-use pattern is consistent with the Logistic model of populatio
 	\end{split}
 \end{equation}
 
-where $N(t)$ represents the drug-use amount time $t$, $K$ represents the upper bound of the drug-use level and $r$ means an influence factor of the drug-use amount. Here we choose $r=1$. The model can be understood that there is no strict control and the drug is attractive in the early time, which results in the quickly increase of the drug use. As some departments begin to pay attention to this phenomenon and implement policies to control it, the growth rate of drug use begins to decrease. When the drug-use level is close to the allowable upper bound, $\frac{(1-Q)}{K} \approx 0$ . At this point, the drug-use level will no longer increase. Considering that our model is discrete in time,  we replace $\frac{dN(t)}{dt}$ with $N(t+1)-N(t)$.
+where $N(t)$ represents the drug-use amount time $t$, $K$ represents the upper bound of the drug-use level and $r$ means an influence factor of the drug-use amount. The model can be understood that there is no strict control and the drug is attractive in the early time, which results in the quickly increase of the drug use. As some departments begin to pay attention to this phenomenon and implement policies to control it, the growth rate of drug use begins to decrease. When the drug-use level is close to the allowable upper bound, $\frac{(1-Q)}{K} \approx 0$ . At this point, the drug-use level will no longer increase. Considering that our model is discrete in time,  we replace $\frac{dN(t)}{dt}$ with $N(t+1)-N(t)$.
 
 The following equations gives the solution of logistic regression (Equation (\ref{logistic})).
 \begin{gather}
-	N(t)=\frac{K}{1+Ce^{-(t-t_{0})}} \\
+	N(t)=\frac{K}{1+Ce^{-r(t-t_{0})}} \\
 	C=\frac{K-N_{0}}{N_{0}} 
 \end{gather}
 The above mathematical formulas and model can be established by programing. We utilize the data of ten clusters to buildthe model and acquire the logistic regressing curves.
@@ -173,7 +193,7 @@ In order to test the effectiveness of our model, we first put the total drug rep
 
 According to fitted curves of the remaining data, we obtain the curves of drug-use level for 20 years from 2000 to present. Then, we look for intersections of every curve and the time axis. Fig. \ref{Fig.2} describes most clusters’ characteristics of total drug use.
 
-We can clearly see that Cluster-2, where drug cases have started since 1999, is earlier than any other six clusters and this is exactly our target to find in specific opioids in most clusters.
+We can clearly see that Cluster-2, where drug cases have started since 1999, is earlier than any other six clusters and this is exactly our target to find in specific opioids in most clusters. Consulting the map of U.S., we know that Cluster-2 represents Washington area.
 
 Therefore, we further make use of this model to analyze the usage of heroin and synthetic opioids screened in data screening and acquire the following results.
 
@@ -194,9 +214,9 @@ Therefore, we further make use of this model to analyze the usage of heroin and 
 	\end{minipage}
 \end{figure}
 
-As we can see from Fig. \ref{Fig.3}, the Cluster-8 in the ten clusters has already started using heroin drugs before 2000. It can be considered that counties which belongs to Cluster-8 could be the locations where heroin started to appear and use.
+As we can see from Fig. \ref{Fig.3}, the Cluster-8(Pennsylvania) in the ten clusters has already started using heroin drugs before 2000. It can be considered that counties which belongs to Cluster-8 could be the locations where heroin started to appear and use.
 
-In Fig. \ref{Fig.4}, it can be seen that Cluster-1, 3, 7, 8, and 9 all started using drugs around 2001. Because the time accuracy is not particularly precise, they may all be the areas where synthetic opioids were used earlier. According to our model, we believe that the TODO represented by Cluster-3 is the area where the synthetic opioids use have started earlier, and the other TODO represented by other clusters(Cluster-1,7,8 and 9) may also be areas that have already been used.
+In Fig. \ref{Fig.4}, it can be seen that Cluster-1, 3, 7, 8, and 9 all started using drugs around 2001. Because the time accuracy is not particularly precise, they may all be the areas where synthetic opioids were used earlier. According to our model, we believe that the Kentucky represented by Cluster-3 is the area where the synthetic opioids use have started earlier.
 
 What’s more, we use the logistic discrete equation to solve the coefficients of the regression, and obtain the maximum tolerance of drug-use in each region based on this model. Results presented presented in the following table will continue to be used in subsequent models.
 \begin{table}[H]
@@ -228,7 +248,7 @@ For simplification, let $S_{1}$ and $S_{2}$ denote, respectively, Species 1 and 
 Next, we extend and apply the above equations to model interactions between the 10 clusters. Let $u_{k}(t)$ denote the Cluster-k, where k = 1,2,…,10. Let $a_{k}$ denote the change rate of Cluster-k itself, and $b_{kj}$ denote the influence of Cluster-j to Cluster-k. The equations can be written as
 \begin{equation}
 	\begin{split}
-	\frac{du_{k}(t)}{dt} &= u_{k}(t)(a_{k} + \sum_{j=1}^{9}b_{kj}u_{k}(t)) \\
+	\frac{du_{k}(t)}{dt} &= u_{k}(t)(a_{k} + \sum_{j=1}^{9}b_{jk}u_{k}(t)) \\
 	k &= 1,2,..,9
 	\end{split}
 \end{equation}
@@ -406,7 +426,7 @@ According to the logistic model, we have obtained tolerances for drug-use levels
 
 In the above figure, we know that the number of drug use in some areas is decreasing annually or being stable at a relatively low value. So it can be considered that drug usage will not exceed its threshold level in the next few years, and the government does not need to be concerned about these areas, hence we no longer make their curves. Now we focus on clusters with clearly upward drug-use trends. The first goal is to find the intersection of the drug threshold level and the rising curve in order to make a judgement on whether government should take actions. The following figures clearly demonstrates what has been mentioned.
 
-We can see that both Cluster-2 and 7 exceed the drug threshold levels. Cluster-2 will reach the threshold level 2018, which indicates that local government should take measures as much quickly as possible. And Cluster-7 will reach the threshold a few years later, around 2021. Also, it shows that the rising trend still maintains for the following years. So it can be considered that drug use may be uncontrolled in these two regions when the levels are exceeded. Thus, it is urgent for the government to adopt effective measures in advance.
+We can see that both Cluster-2 and Cluster-7, which represent Washington, West Virginia and part of Pennsylvania, exceed the drug threshold levels. Cluster-2 will reach the threshold level 2018, which indicates that local government should take measures as much quickly as possible. And Cluster-7 will reach the threshold a few years later, around 2021. Also, it shows that the rising trend still maintains for the following years. So it can be considered that drug use may be uncontrolled in these two regions when the levels are exceeded. Thus, it is urgent for the government to adopt effective measures in advance.
 
 \begin{figure}[H]
 	\centering %图片全局居中
@@ -578,7 +598,7 @@ Above all, the explanations of the current level which opioid use got to are var
 \subsection{Short-term Policy: Reducing the Natural Growth Rate of Major Domain}
 In Section 4.2, we use the Lotka-Volterra equations to simulate the interactions between different clusters. This model prerequisite the environment is stable and thus not considering changes. So it is only suitable for short-term prediction. We utilize it to guide our short-term policy.
 
-For each species-i, leaving out other sepcies' influence, it has a natural growth rate $a_{i}$ of itself. Therefore, the first idea is to decrease the $a_{i}$ for regions. For instance, enforcing laws to penalize non-prescription use of drugs more strongly, from Fig. \ref{Fig14}, the dash line represents drug-use of restricting $a_{i}$, and the effect is significant.
+For each species-i, leaving out other sepcies' influence, it has a natural growth rate $a_{i}$ of itself, which is multipied by $\lambda$. Therefore, the first idea is to forcely decrease the $\lambda$ for regions. For instance, enforcing laws to penalize non-prescription use of drugs more strongly, from Fig. \ref{Fig14}, the dash line represents drug-use of restricting $a_{i}$, and the effect is significant.
 
 \begin{figure}[H]
 	\centering %图片全局居中
@@ -607,17 +627,27 @@ However, Fig. \ref{Fig14} simultaneously demonstrates that when one area impleme
 \end{figure}
 
 \subsection{Long-term Policy: Reducing the Natural Growth Rate Nationally}
+Compared to the short-term policy, long-term policy could be some measures that influence the whole society and then regulate the drug-use level. In order to prove out view, we use the improved model to adjust the regional education factor and family factor (marriage rate, single female proportion and so on). When we change the value of above two factors by increasing them by 0.6 percentage, we obtain the dashed line presented in the Fig. \ref{Fig17}. It is clearly that these two factors can reduce the usage of drugs by more than 10\%, therefore we can believe that increasing the popularity of education, as well as encouraging marriage are conducive to affect and control the US drug-use level.
+\begin{figure}[H]
+	\centering
+	\includegraphics[scale=0.7]{./figures/17.png}
+	\caption{Policies in the Long Term}
+	\label{Fig17}
+\end{figure}
 
 \section{Strengths and Weaknesses}
 \subsection{Strengths}
 \begin{itemize}
     \item Our model takes the idea of clustering, which overcomes the disadvantages of analysing either the whole state or one single county.
     \item We take several measures to process the data and make it convenient for use, while the authenticity and integrity of data is still maintained.
+    \item In the process of Drug Reports data, our model takes the idea of clustering, which overcomes the disadvantages of analyzing either the whole state or one single county. In the process of Census socio-economic data, we use the Entropy Weight Method to maximum compressed variables on the basis of maintaining certain economic logic.
+	\item In order to identify where specific opioid use, we construct the Logistic Model for simplicity. And we get maximum number from the model to further determine threshold levels for caution. While forecasting its future patterns and characteristics, we ues and the Modified LVM to consider both the interaction and factors’ influence.
 \end{itemize}
 
 \subsection{Weaknesses}
 \begin{itemize}
-    \item Nothing yet
+	\item Although we use the K-means clustering algorithm to replace five states into areas represented by ten clusters in order to simplify data processing, the subsequent analysis must be based on the clusters’ data. Therefore, it can not be accurately analyzed and that is to say here’s a certain error.
+	\item Logistic regression model is suitable for most of the clusters data, but there are still 2~3 clusters which have decreasing trends. In the process of solving problems, we do not handle them by other models and also think that they will not exceed the threshold level. It seems kind of impractical.
  \end{itemize}
 
 \begin{thebibliography}{99}
