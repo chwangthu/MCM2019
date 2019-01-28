@@ -16,7 +16,7 @@
 \usepackage{float}
 \usepackage{IEEEtrantools}
 \captionsetup[figure]{font=scriptsize}
-\title{\large God or evil? A ... model analysing and predicting opioid use}  % 标题
+\title{\large Modified Lotka-Volterra Model analysing and predicting opioid use}  % 标题
 \setlength\parindent{0pt} %default no indent
 \newcommand{\upcite}[1]{\textsuperscript{\textsuperscript{\cite{#1}}}}
 \renewcommand{\figurename}{Fig.}
@@ -44,12 +44,13 @@ Initially, we use Logistic Regression Model to characterize the trend of opioids
 \subsubsection*{Insights of Dataset}
 During we analyze the dataset, we have the following insights:
 \begin{itemize}
+	\item The influencing factors for different regions differ greatly.
 	\item In the short term, controlling the drug use by force in one region may lead to an increase in the neighboring region.
 	\item In the long term, educational level and family environment such as marital status have paramount effects on drug use.
 \end{itemize}
 
 \subsubsection*{Recommendations}
-Based on our research, we have some recommendations for NEA:
+Based on our research, we have some recommendations for DEA:
 \begin{itemize}
 	\item Reduce the possibility of making regional policies, take national action instead.
 	\item Promote the educational level and family satisfication of the public, which can be achieved by developing the economic and others.
@@ -63,16 +64,24 @@ Opioids, no matter synthetic ones or non-synthetic ones, play an significant rol
 Recent years have witnessed the tremendous growth of opioids cases. How this trend will develop remains an national concern. With data of annual drug use and socio-economic factors in five U.S. states over the past few years, we perform data mining and construct a model to figure out the pattern of opioids use and what contributes to it.
 
 \subsection{Problem Statement and Analysis}
-The problem is about the opioid crisis in the U.S. society, which offering us a set of data ranging from 2010 to 2017.Our main task is to build models that enable us to identify the locations where specific opioid use started and describe the patterns and characteristics of opioid incidents spread. 
+The problem is about the opioid crisis in the U.S. society, offering us a set of data ranging from 2010 to 2017. Our main task is to build models that enable us to identify the locations where specific opioid use started and describe the patterns and characteristics of opioid incidents spread. 
 
 First, this is a typical data problem, so we should carefully preprocess the data provided. In the MCM\_NFLIS Data, there are 461 counties belongs to 5 states. For most of the counties, the drug reports are fluctuant, even with large amount of missing data. Besides if we combined all the drug reports of certain state, the start of specific opioid use of one county may be covered up by opioid use of other counties. Therefore, in order to increase the stability of patterns without losing the accuracy, we use the K-means algorithm to combine 461 counties into 10 clusters for our further modeling.
-While in the U.S. Census socio-economic data, there are about nearly 600 variables ranging from 2010 to 2017, which is too large to use in the model. We notice that every variable can be classified into certain category by its name, like “HOUSEHOLDS BY TYPE”, “MARITAL STATUS” and so on. It’s reasonably to use Entropy Weight Method to combine 596 variables into 15 factors.
 
-Second, in the early development stage of the heroin incidents, we think such incidents can be treat as  individual events and the interaction between different states has not yet been formed. So we use the Logistic Model to describe the initial trend of heroin incidents. Through the Logistic Model, we can also get the maximum number of each cluster, which will be used in the next part to determine the threshold levels.
+While in the U.S. Census socio-economic data, there are about nearly 600 variables ranging from 2010 to 2017, which is too large to use in the model. We notice that every variable can be classified into certain category by its name, like “HOUSEHOLDS BY TYPE”, “MARITAL STATUS” and so on. It's reasonable to use Entropy Weight Method to combine 596 variables into 15 factors.
 
-Third, with the spread of incidents, states may start interact with each other and a stable environmental condition for the Logistic Model is no longer met. Therefore, we use the Lotka-Volterra Model to model the spread and characteristics of the reported incidents and forecast the future trend of the heroin incidents. Then we use the Modified Lotka-Volterra Model by adding different factors.
+Second, in the early development stage of the heroin incidents, we think such incidents can be treated as individual events and the interaction between different states has not yet been formed. So we use the Logistic Model to describe the initial trend of heroin incidents. Through the Logistic Model, we can also get the maximum number of each cluster, which will be used in the next part to determine the threshold levels.
+
+Third, with the spread of incidents, states may start interact with each other and a stable environmental condition for the Logistic Model is no longer met. Therefore, we use the Lotka-Volterra Model to study the spread and characteristics of the reported incidents and forecast the future trend of the heroin incidents. Then we use the Modified Lotka-Volterra Model by adding different factors.
+
 Finally, the Modified Lotka-Volterra Model can provide us both the relationships between clusters and the influence of different factors. By taking all these factors into account, we can identify a possible strategy for countering the opioid crisis and test the effectiveness of this strategy by our model.
 
+\begin{figure}[H]
+	\centering
+	\includegraphics[scale=0.4]{./figures/18.png}
+	\caption{Overall Flow Graph}
+	\label{Fig18}
+\end{figure}
 
 \section{Assumptions and Notations}
 \subsection{Assumptions}
@@ -84,7 +93,7 @@ Given the lack of necessary data and limitation of our knowledge, we made the fo
 	\item The influence of the factors to heroin incidents remain unchanged and the factors of each clusters grow linearly.
 \end{itemize}
 
-\section{Notations}
+\subsection{Notations}
 The primary notations used in this paper are listed in Table \ref{tb:notation}.
 \begin{table}[!htbp]
 \small
@@ -112,7 +121,7 @@ We are provided with two types of data, the number of drug reports in categories
 % In US, each county is assigned a unique five-digit code called FIPS county code. 
 In the worksheet about socio-economic factors, there are many cells that contain no valid information at all. We delete columns and rows which contains a lot of useless cells. For other columns and rows, when invalid items appear, we replace it with the average value of the entire sequence.
 
-\subsection{Combine variables of a Socio-economic Factor}
+\subsection{Combine variables into a Socio-economic Factor}
 For every year from 2010 to 2016, there are a list of variables about one single socio-economic factor. For instance, factor ANCERSTRY includes estimate, estimate margin of error, percent, etc. Those variables all reflect some information of the target factor in some aspects, hence how to rank their importance matters. 
 
 In information theory, entropy represents the information a sequence contains\upcite{3}. So Entropy Weight Method (EWM), which gives each index a weight according to their entropy, is chosen to measure the significance of each index. Before that, we normalize the data given using the following equation.
@@ -161,7 +170,7 @@ In order to describe the dissemination and characteristics of the synthetic opio
 \end{table}
 
 \section{Model Construction}
-\subsection{Identify Locations using Logistic Regression}
+\subsection{Identify Locations using Logistic Model}
 \subsubsection{Model Establishment}
 With the k-means cluster analysis, we acquire data about the synthetic opioid and heroin events in ten clusters. It is clear to identify that the drug use levels in most areas are increasing. If drug use continues to grow at such speed, it will bring about numerous negative effects to the society when it exceeds an certain level, as mentioned in the Problem Background. Therefore, government’s relevant departments, including the Drug Enforcement Administration(DEA), will take corresponding measures to control the growing trend of drug use. However, when consumptions reach a high level, the growing rate in usage will reduce. And it is gradually increasing when consumptions are low.
 
@@ -182,7 +191,7 @@ The following equations gives the solution of logistic regression (Equation (\re
 \end{gather}
 The above mathematical formulas and model can be established by programing. We utilize the data of ten clusters to buildthe model and acquire the logistic regressing curves.
 
-\subsubsection{Model Application and Solving Problems}
+\subsubsection{Model Application and Problems Solving}
 In order to test the effectiveness of our model, we first put the total drug reports into the model for regressing and fitting, and get the following results. From the above clusters mentioned, the drug-use level in some areas is decreasing or fluctuating, we find three unsuitable clusters(Cluster-4, Cluster-5, Cluster-10) and the Fig. \ref{Fig.1} can show that those data are not suitable in this model. Therefore we cannot use the Logistic population growth model to perform regression of these areas’ drug reports. That is to say, other models may be needed for their prediction, which is not considered currently.
 
 \begin{figure}[H]
@@ -232,7 +241,7 @@ Therefore, we further make use of this model to analyze the usage of heroin and 
 	\end{minipage}
 \end{figure}
 
-As we can see from Fig. \ref{Fig.3}, the Cluster-8(Pennsylvania) in the ten clusters has already started using heroin drugs before 2000. It can be considered that counties which belongs to Cluster-8 could be the locations where heroin started to appear and use.
+As we can see from Fig. \ref{Fig.3}, the Cluster-8(Pennsylvania) in the ten clusters has already started using heroin drugs before 2000. It can be considered that counties which belonging to Cluster-8 could be the locations where heroin started to appear and use.
 
 In Fig. \ref{Fig.4}, it can be seen that Cluster-1, 3, 7, 8, and 9 all started using drugs around 2001. Because the time accuracy is not particularly precise, they may all be the areas where synthetic opioids were used earlier. According to our model, we believe that the Kentucky represented by Cluster-3 is the area where the synthetic opioids use have started earlier.
 
@@ -252,7 +261,7 @@ What’s more, we use the logistic discrete equation to solve the coefficients o
 	\end{tabular}
 \end{table}
 
-\subsection{Iterative Lokta-Volterra Model to describe the spread and characteristics}
+\subsection{Describing the spread and characteristics using Iterative Lotka-Volterra Model}
 In the last section 4.1, we construct Logistic Model to identify the possible locations where specific opioid use might have started. However, as the number of drug reports approaches the carrying capacity $u_{max}$, the Logistic Model become smooth and can’t provide more information about the changing trends. Therefore, in this section, we modify the dynamic Lotka-Volterra equations to model the interactions between different clusters.
 	
 The Lotka-Volterra equations are known as the predator-prey equations in a biological system of two (or more) species. In fact, the Lotka-Volterra equations can describe not only the predation relationships between species, but also the competition, parasitism even mutualism relationships. And we think the spread of the reported synthetic opioid and heroin incidents may have a mixed features, which meets the application conditions.
@@ -518,7 +527,7 @@ The first three equilibrium points contain the coordinate 0, which contrasts the
 
 The matrix $\bar B$ may not satisfy the corresponding conditions.
 
-\subsection{Modified Iterative Lotka-Volterra Model}
+\subsection{Considering Factors Using Modified Iterative Lotka-Volterra Model}
 In the last section, we build the Iterative Lotka-Volterra Model(LVM) to research the interactions between different clusters. However, the LVM can only be applied in a short range of time. In this section, we modify the LVM by adding attribute characters from the U.S. Census socio-economic data.
 
 The U.S. Census socio-economic data has nearly 500 more variables ranging from 2010 to 2016, which is too large to use. In the data process section, we use entropy weight method to further classify variables into 15 factors. The time series of 15 factors in Cluster 1 are listed as follows.
@@ -544,7 +553,7 @@ As we can see from Fig. \ref{Fig9}, part of those factors are strongly correlate
 
 Fig. \ref{Fig11} demonstrates the major influential factors. We observe that the influencing factors differ by regions, based on the locations of five states and ten clusters in the map. \ref{Fig11}. So we categorize these influencing factors on a geographical basis, which are presented in \ref{Fig11}.
 
-It is obvious that immigration plays a decisive role in Cluster-2, 8, and 9 near the East Coast. This is not difficult to understand, because many immigrants started locating in the east coast of the United States ever since Columbus discovered the Americas. The immigration culture and degree also determine their preference and use of drugs to some extent. At the same time, the drug-use level in the east of West Virginia area is related to veterans, which can be speculated in the light of the fact that military power concentrates in its vincWashington, DC. 
+It is obvious that immigration plays a decisive role in Cluster-2, 8, and 9 near the East Coast. This is not difficult to understand, because many immigrants started locating in the east coast of the United States ever since Columbus discovered the Americas. The immigration culture and degree also determine their preference and use of drugs to some extent. At the same time, the drug-use level in the east of West Virginia area is related to veterans, which can be speculated in the light of the fact that military power concentrates in its vicinity - Washington, DC. 
 
 The main influence factor in the central region is the level of education. Since there are various institutions of high level in these regions (Cluster-1, 5, 7, 10), we can conclude that education is also closely related to drug use. As forwestern regions of the five states, family composition could be the main reason. Based on common knowledge, there is a certain relationship between drug crime, family background and growing environment, the result is convincing.
 
@@ -597,20 +606,17 @@ By calculating, we get the next 50 years of drug reports in different clusters.
 \section{Toward the Policy}
 In this section, we will identify a possible strategy for countering the opioid crisis and use our model to test the effectiveness of this strategy. Before that, it’s necessary to have a close look at the historical policy to opioid users in the U.S.
 
-\subsection{Overview of Policies towards Opioid Users} %TODO: Reference
-In American, opioid use and sales are strictly prohibited and strongly condemned. Opioid users are constantly confronted by government agencies, law enforcement, treatment programs, and the general citizenry to desist from their behaviors. Politicians, with extensive citizen support, routinely enact “tough” policies that impose lengthy penal sentences for opioid users. However, some policies or programs that are based on a “harm reduction” or “harm minimization” philosophy are perceived by federal and state officials as inconsistent with the stated goal of heroin “abstinence”. We list major policies as follows:
+\subsection{Historical Policies towards Opioid Users} %TODO: Reference
+In U.S., the drug control started from 1940s, both use and sale of opioids are under supervision. Policicians were dedicated to enforce policies that impose penalties for drug users. Those users may feel pressure from every aspects, the government agencies, laws, and treatment programs\upcite{5}. We list major policies in the following paragraphs.
 
-\subsubsection{Needle and Syringe Policies}
-In the 1940s, some states attempted to reduce heroin addiction by prohibiting the scales of needles and syringes to persons lacking a physician’s prescription. To prevent heroin addicts from getting syringes, the legislature made needle/syringe possession and sale a crime similar to possession of small amount of heroin. The lack of needles lead  many users to consume their heroin in “shooting galleries”, where they shared injection equipment. With the rise of HIV/AIDS as a major public health issue, in the 1990s, the government permitted and funded private ”needle exchanges”. Opponents have claimed that that syringe exchange send the “wrong message” to the society.
+Some states started to limit needles and syringes for people without prescriptions from doctors ever since 1940s. To prevent heroin addiction, the needles/syringes possession was made a crime similar to heroin possession. This policy made herion addicts share needles with each other, which stimulated the increase of HIV and AIDS infection rate.
 
-\subsubsection{Drug Treatment for Heroin Users}
-In the late 1960s and early 1970s, American policy makers supported the development of new modalities of drug treatment. Especially important was methadone maintenance treatment(MMT), which has been documented as effective in retaining clients in treatment, reducing heroin use, and reduce drug-related crime. Also important was the development of long-term therapeutic communities that provided residential, abstinence-based recovery programs for addicts.
+From late 1960s, the U.S. government started to treatment addicts with new medicine, particularly methadone maintenance treatment(MMT). It was proved that MMT was useful for drug users and decreased heroin use, and drug-related crimes were also reduced. The government also constructed communities for therapy, which supplied houses, abstinence-based recovery programs for people addicted to drugs\upcite{4}.
 
-\subsubsection{Health Care and Income Support Systems}
-The U.S. health care system is largely privately funded. Those employed in high-income jobs are usually enrolled in private health insurance plans. Because of the high costs of health care, most active heroin IUDs in the USA have no health insurance coverage or health care options. What’s more, the income transfer systems aren’t generous and are hard to obtain for those who lose their jobs. Moreover, the welfare reform policies of 1996 are designed to remove many IDUs and drug users from existing income transfer systems. As a partial result, may heroin users and IDUs have no legal jobs, no income support, and do net have a stable residence. 
+For those doesn't obey the drug control laws, police officers will impose sanctions accordingly. Public chose to take "Zero tolerance" attitude toward heroin users in view of heroin's harm. Therefore, both drug buyers and seller to took several measures to escape the inspection of the police. The sellers, made this activity unknown for as much people as they can, including neighbors, family members and even other heroin users\upcite{5}.
 
-\subsubsection{Policing and Law Enforcement}
-Police officers are charged with enforcing the laws of the state upon those who do not or will not obey the prohibitionist drug laws. The public has demanded the police respond “zero tolerance” towards heroin users. In response to police activity, both sellers and users have developed various techniques for hiding drugs when police up. Drug sellers have an array of strategies for concealing their business activities from police, non-using neighbors, and from other heroin users.
+Because heroin and other opioids often have a high cost, it is normally not covered by the insurance, since the U.S. health system is mainly funded privately. And People who are jobless may face difficulties when using the income transfrom system, many drug users were even removed from the system in the 1990s. That means that they don't have stable income, job and even residence\upcite{5}.
+
 Above all, the explanations of the current level which opioid use got to are various and complex. Some policies may have side effect, therefore the government should carefully select policy.
 
 \subsection{Short-term Policy: Reducing the Natural Growth Rate of Major Domain}
@@ -623,12 +629,12 @@ For each species-i, leaving out other sepcies' influence, it has a natural growt
 	%并排几个图，就要写几个minipage
 	\begin{minipage}[b]{0.48\textwidth} %所有minipage宽度之和要小于1，否则会自动变成竖排
 		\centering %图片局部居中
-		\includegraphics[scale=0.6]{./figures/13.png} %此时的图片宽度比例是相对于这个minipage的，不是全局
+		\includegraphics[scale=0.68]{./figures/13.png} %此时的图片宽度比例是相对于这个minipage的，不是全局
 		% \caption{}
 	\end{minipage}
 	\begin{minipage}[b]{0.48\textwidth} %所有minipage宽度之和要小于1，否则会自动变成竖排
 		\centering %图片局部居中
-		\includegraphics[scale=0.6]{./figures/14.png}%此时的图片宽度比例是相对于这个minipage的，不是全局
+		\includegraphics[scale=0.68]{./figures/14.png}%此时的图片宽度比例是相对于这个minipage的，不是全局
 		% \caption{}
 	\end{minipage}
 	\caption{Drug Reports Change Before Policy(BP) and After Policy(AP) in Policy-Implemented Areas(left) and Other Areas(right)}
@@ -639,12 +645,12 @@ However, Fig. \ref{Fig14} simultaneously demonstrates that when one area impleme
 
 \begin{figure}[H]
 	\centering
-	\includegraphics[scale=0.7]{./figures/16.png}
+	\includegraphics[scale=0.9]{./figures/16.png}
 	\caption{Policies in an national scale}
 	\label{Fig16}
 \end{figure}
 
-\subsection{Long-term Policy: Reducing the Natural Growth Rate Nationally}
+\subsection{Long-term Policy: Increasing Education Attainment and Married Rate}
 Compared to the short-term policy, long-term policy could be some measures that influence the whole society and then regulate the drug-use level. In order to prove out view, we use the improved model to adjust the regional education factor and family factor (marriage rate, single female proportion and so on). When we change the value of above two factors by increasing them by 0.6 percentage, we obtain the dashed line presented in the Fig. \ref{Fig17}. It is clearly that these two factors can reduce the usage of drugs by more than 10\%, therefore we can believe that increasing the popularity of education, as well as encouraging marriage are conducive to affect and control the US drug-use level.
 \begin{figure}[H]
 	\centering
@@ -656,9 +662,7 @@ Compared to the short-term policy, long-term policy could be some measures that 
 \section{Strengths and Weaknesses}
 \subsection{Strengths}
 \begin{itemize}
-    \item Our model takes the idea of clustering, which overcomes the disadvantages of analysing either the whole state or one single county.
-    \item We take several measures to process the data and make it convenient for use, while the authenticity and integrity of data is still maintained.
-    \item In the process of Drug Reports data, our model takes the idea of clustering, which overcomes the disadvantages of analyzing either the whole state or one single county. In the process of Census socio-economic data, we use the Entropy Weight Method to maximum compressed variables on the basis of maintaining certain economic logic.
+	\item In the process of Drug Reports data, our model takes the idea of clustering, which overcomes the disadvantages of analyzing either the whole state or one single county. In the process of Census socio-economic data, we use the Entropy Weight Method to maximum compressed variables on the basis of maintaining certain economic logic.
 	\item In order to identify where specific opioid use, we construct the Logistic Model for simplicity. And we get maximum number from the model to further determine threshold levels for caution. While forecasting its future patterns and characteristics, we ues and the Modified LVM to consider both the interaction and factors’ influence.
 \end{itemize}
 
@@ -670,10 +674,15 @@ Compared to the short-term policy, long-term policy could be some measures that 
 
 \begin{thebibliography}{99}
 \addcontentsline{toc}{section}{References}  %引用部分标题（"Refenrence"）的重命名
+
 \bibitem{1}MacQueen, J. (1967, June). Some methods for classification and analysis of multivariate observations. In Proceedings of the fifth Berkeley symposium on mathematical statistics and probability (Vol. 1, No. 14, pp. 281-297).
 \bibitem{2}Gazetteer Files - Geography - U.S. Census Bureau. \texttt{\\https://www.census.gov/geo/maps-data/data/gazetteer.html}
 \bibitem{3}Shannon, C. E. (1948). A mathematical theory of communication. Bell system technical journal, 27(3), 379-423.
 \bibitem{4}DrugBank. \texttt{https://www.drugbank.ca/drug}
+\bibitem{5}Johnson, B. D., Maher, L., \& Friedman, S. R. (2001). What public policies affect heroin users?. Journal of Applied Sociology, 14-49.
+\bibitem{6}ZHANG Yu, GAO Kening, CHEN Mo, YU GA (2018). Method of Link Prediction Combining Network Structure and Node Attributes. Journal of Frontiers of Computer Science and Technology.
+\bibitem{7}Carrieri, M. P., Amass, L., Lucas, G. M., Vlahov, D., Wodak, A., \& Woody, G. E. (2006). Buprenorphine use: the international experience. Clinical Infectious Diseases, 43(Supplement\_4), S197-S215.
+
 \end{thebibliography}
 
 \clearpage
@@ -690,38 +699,131 @@ Compared to the short-term policy, long-term policy could be some measures that 
 
 
 This python program implements k-means clustering.
-\lstinputlisting[language={python}, caption=\texttt{k-means.py}]{../code/k-means.py}
+\begin{lstlisting}[language={python}, caption=\texttt{k-means.py}]
+from numpy import *
+import time
+from math import radians, cos, sin, asin, sqrt
+import matplotlib.pyplot as plt
+	
+
+def calculate_dis(vec1,
+					vec2):
+	"""
+	Calculate the distance between two places
+	"""
+	# print(vec1)
+	# print(vec2)
+	lat1 = vec1[0]
+	lon1 = vec1[1]
+	lat2 = vec2[0]
+	lon2 = vec2[1]
+	lon1, lat1, lon2, lat2 = map(radians, [lon1, lat1, lon2, lat2])
+	
+	# haversine
+	dlon = lon2 - lon1 
+	dlat = lat2 - lat1 
+	a = sin(dlat/2)**2 + cos(lat1) * cos(lat2) * sin(dlon/2)**2
+	c = 2 * asin(sqrt(a)) 
+	r = 6371 # the radius of earth
+	return c * r * 1000 # return in meters
+	
+# init centroids with random samples
+def initCentroids(dataSet, k):
+	numSamples, dim = dataSet.shape
+	centroids = zeros((k, dim))
+	for i in range(k):
+		index = int(random.uniform(0, numSamples))
+		centroids[i, :] = dataSet[index, :]
+	return centroids
+	
+# k-means cluster
+def kmeans(dataSet, k):
+	numSamples = dataSet.shape[0]
+	# first column stores which cluster this sample belongs to,
+	# second column stores the error between this sample and its centroid
+	clusterAssment = mat(zeros((numSamples, 2)))
+	res = zeros((numSamples, 1))
+	clusterChanged = True
+
+	centroids = initCentroids(dataSet, k)
+
+	while clusterChanged:
+		clusterChanged = False
+		## for each sample
+		for i in range(numSamples):
+			minDist  = 100000000000.0
+			minIndex = 0
+			## for each centroid
+			## step 2: find the centroid who is closest
+			for j in range(k):
+				distance = calculate_dis(centroids[j, :], array(dataSet[i])[0]) #convert to array
+				if distance < minDist:
+					minDist  = distance
+					# print("minDist", minDist)
+					minIndex = j
+					# print("minindex", minIndex)
+			
+			## step 3: update its cluster
+			if clusterAssment[i, 0] != minIndex:
+				clusterChanged = True
+				clusterAssment[i, :] = minIndex, minDist**2
+				res[i] = minIndex
+
+		## step 4: update centroids
+		for j in range(k):
+			pointsInCluster = dataSet[nonzero(clusterAssment[:, 0].A == j)[0]]
+			centroids[j, :] = mean(pointsInCluster, axis = 0)
+	return centroids, clusterAssment, res
+\end{lstlisting}
 % \inputpython{../code/k-means.py}{0}{68}
 
-This MATLAB program is used to calculate the value of variable $a$.
-\begin{lstlisting}[language={Matlab}, caption=\texttt{temp.m}]
-a = 0;
-for i = 1:5
-	a = a + 1;
-end
-\end{lstlisting}
+This python program implements entropy weight method.
+\begin{lstlisting}[language={python}, caption=\texttt{entropy-weight.py}]
+import numpy as np
+import pandas as pd
 
-This LINGO program is used to search the optimize solution of 0-1 problem.
-\begin{lstlisting}[language=Lingo, caption=\texttt{temp.lg4}]
-model:
-sets:
-WP/1..12/: M, W, X;
-endsets
-data:
-M = 2 5 18 3 2 5 10 4 11 7 14 6;
-W = 5 10 13 4 3 11 13 10 8 16 7 4;
-enddata
-max = @sum(WP:W*X);
-@sum(WP: M * X)<=46;
-@for(WP: @bin(X));
-end
+def entropy(dataset):
+    n, k = np.shape(dataset)
+    maximum = np.max(dataset, axis=0) #minimum in column
+    minimum = np.min(dataset, axis=0)
+    data = (dataset - minimum) * 1.0 / (maximum - minimum)
+    col_sum = np.sum(data, axis=0)
+    data = data / col_sum
+    a = data * 1.0
+    a[np.where(data==0)]=0.0001
+    e = (-1.0/np.log(n))*np.sum(data*np.log(a), axis=0) # e 1*k
+    w = (1 - e) / np.sum(1 - e)
+    recodes = np.sum(dataset * w, axis=1)
+    return recodes
 \end{lstlisting}
+% \lstinputlisting[language={python}, caption=\texttt{entropy\_weight.py}]{../code/entropy\_weight.py}
 
-\textbf{\textcolor[rgb]{0.98,0.00,0.00}{Input matlab source:}}
-% \lstinputlisting[language=Matlab]{../code/matlab-test.m}
+% This MATLAB program is used to calculate the value of variable $a$.
+% \begin{lstlisting}[language={Matlab}, caption=\texttt{temp.m}]
+% a = 0;
+% for i = 1:5
+% 	a = a + 1;
+% end
+% \end{lstlisting}
+
+% This LINGO program is used to search the optimize solution of 0-1 problem.
+% \begin{lstlisting}[language=Lingo, caption=\texttt{temp.lg4}]
+% model:
+% sets:
+% WP/1..12/: M, W, X;
+% endsets
+% data:
+% M = 2 5 18 3 2 5 10 4 11 7 14 6;
+% W = 5 10 13 4 3 11 13 10 8 16 7 4;
+% enddata
+% max = @sum(WP:W*X);
+% @sum(WP: M * X)<=46;
+% @for(WP: @bin(X));
+% end
+% \end{lstlisting}
+
+% \textbf{\textcolor[rgb]{0.98,0.00,0.00}{Input matlab source:}}
+% % \lstinputlisting[language=Matlab]{../code/matlab-test.m}
 
 \end{appendices}
-
-
-
 \end{document}
