@@ -95,11 +95,11 @@ So far, we have combined several variables of a factor into one $y'_{i}$, and th
 \subsection{Cluster Counties of Five States}
 Since we have detailed number of drug reports, it is not hard to fit a curve to observe the trend of opioid use for each state and for each county. However, we consider this method inappropriate. On the one hand, the sample for only one county is normally fluctuating irregularly, i.e. drug reports of heroin in ACCOMACK, VA was 2, 38, 6 during 2012-2014. It is unnecessary and meaningless to bulid a model when facing such fluctuation. On the other hand, given the large number of all kinds of opioids, even one type change significantly, it is not obvious when viewed as the level of the whole state.
 
-Considering that state and county are not suitable for our research, a unit in between is introduced. We put counties on a two-dimensional plane and regard them as nodes. Then, k-means clustering method\upcite{1}, which aims to partion nodes into $k$ clusters minimizing the within-cluster sum of squares, was performed. In our case, we take $k = 10$. The distance of two counties can be computed with their latitude and longtitude retrieved from U.S. Census Bureau\upcite{2}. The clusters we derived are labeled as Cluster-1, Cluster-2, ..., Cluster-10.
+Considering that state and county are not suitable for our research, a unit in between is introduced. We put counties on a two-dimensional plane and regard them as nodes. Then, K-means clustering method\upcite{1}, which aims to partion nodes into $k$ clusters minimizing the within-cluster sum of squares, was performed. In our case, we take $k = 10$. The distance of two counties can be computed with their latitude and longtitude retrieved from U.S. Census Bureau\upcite{2}. The clusters we derived are labeled as Cluster-1, Cluster-2, ..., Cluster-10.
 \begin{figure}[H]
 	\centering
 	\includegraphics[scale=0.3]{./figures/0.png}
-	\caption{Clusters got after k-means, points with the same color belong to one cluster}
+	\caption{Clusters got after K-means, points with the same color belong to one cluster}
 	\label{Fig0}
 \end{figure}
 
@@ -379,15 +379,30 @@ In order to get the iterative matrix $\bm{A}$, we use the least square method to
 	\bm{U}(\bm{t}+\frac{1}{2}) = \cfrac{\bm{U}(\bm{t}+1) + \bm{U}(\bm{t})}{2}
 \end{equation}
 
-Fig. \ref{Fig5} depicts the trend of opioid and heroin incidents in the 10 clusters for the next 5 years.
+After implementing the above mathematical model by programming, we obtain the coefficient matrix of regression equation, which represents the effects of clusters self-influence and mutual influence. According to the positive or negative values of the matrix, we can conclude the spread feature of the drug usage over time. 
+
+The positive coefficient value indicates the influence is to promote the drug-use level, contrary to the negative value which represents the impact of restricting growth. As distance factor has an effect on regional spread, attention is paid to the propagation between adjacent clusters regardless of long distance. So we have the following relationship network figure, where the solid line indicates that the effect is positive and the dotted line indicates that the effect is negative.
+
+\begin{figure}[H]
+	\centering
+	\includegraphics[scale=0.45]{./figures/15.png}
+	\small
+	\begin{tabular}{rr}
+		$\dashrightarrow$ & Negative Effect \\
+		$\longrightarrow$ & Positive Effect
+	\end{tabular}
+	\caption{Clusters' Self-influence and Mutual Influence}
+	\label{Fig15}
+\end{figure}
+
+According to the logistic model, we have obtained tolerances for drug-use levels in each region, which we approximately consider as the drug threshold level for each region, making an analogy with the maximum environmental capacity in biology. If drug usage exceeds the threshold level, the drug use in this region might become uncontrollable thus resulting in an unprecedented social crisis.
+
 \begin{figure}[H]
 	\centering
 	\includegraphics[scale=0.5]{./figures/5.png}
 	\caption{Trend of the Next 5 Years}
 	\label{Fig5}
 \end{figure}
-
-According to the logistic model, we have obtained tolerances for drug-use levels in each region, which we approximately consider as the drug threshold level for each region, making an analogy with the maximum environmental capacity in biology. If drug usage exceeds the threshold level, the drug use in this region might become uncontrollable thus resulting in an unprecedented social crisis.
 
 In the above figure, we know that the number of drug use in some areas is decreasing annually or being stable at a relatively low value. So it can be considered that drug usage will not exceed its threshold level in the next few years, and the government does not need to be concerned about these areas, hence we no longer make their curves. Now we focus on clusters with clearly upward drug-use trends. The first goal is to find the intersection of the drug threshold level and the rising curve in order to make a judgement on whether government should take actions. The following figures clearly demonstrates what has been mentioned.
 
@@ -541,11 +556,63 @@ By calculating, we get the next 50 years of drug reports in different clusters.
 	\label{Fig12}
 \end{figure}
 
+\section{Toward the Policy}
+In this section, we will identify a possible strategy for countering the opioid crisis and use our model to test the effectiveness of this strategy. Before that, it’s necessary to have a close look at the historical policy to opioid users in the U.S.
+
+\subsection{Overview of Policies towards Opioid Users} %TODO: Reference
+In American, opioid use and sales are strictly prohibited and strongly condemned. Opioid users are constantly confronted by government agencies, law enforcement, treatment programs, and the general citizenry to desist from their behaviors. Politicians, with extensive citizen support, routinely enact “tough” policies that impose lengthy penal sentences for opioid users. However, some policies or programs that are based on a “harm reduction” or “harm minimization” philosophy are perceived by federal and state officials as inconsistent with the stated goal of heroin “abstinence”. We list major policies as follows:
+
+\subsubsection{Needle and Syringe Policies}
+In the 1940s, some states attempted to reduce heroin addiction by prohibiting the scales of needles and syringes to persons lacking a physician’s prescription. To prevent heroin addicts from getting syringes, the legislature made needle/syringe possession and sale a crime similar to possession of small amount of heroin. The lack of needles lead  many users to consume their heroin in “shooting galleries”, where they shared injection equipment. With the rise of HIV/AIDS as a major public health issue, in the 1990s, the government permitted and funded private ”needle exchanges”. Opponents have claimed that that syringe exchange send the “wrong message” to the society.
+
+\subsubsection{Drug Treatment for Heroin Users}
+In the late 1960s and early 1970s, American policy makers supported the development of new modalities of drug treatment. Especially important was methadone maintenance treatment(MMT), which has been documented as effective in retaining clients in treatment, reducing heroin use, and reduce drug-related crime. Also important was the development of long-term therapeutic communities that provided residential, abstinence-based recovery programs for addicts.
+
+\subsubsection{Health Care and Income Support Systems}
+The U.S. health care system is largely privately funded. Those employed in high-income jobs are usually enrolled in private health insurance plans. Because of the high costs of health care, most active heroin IUDs in the USA have no health insurance coverage or health care options. What’s more, the income transfer systems aren’t generous and are hard to obtain for those who lose their jobs. Moreover, the welfare reform policies of 1996 are designed to remove many IDUs and drug users from existing income transfer systems. As a partial result, may heroin users and IDUs have no legal jobs, no income support, and do net have a stable residence. 
+
+\subsubsection{Policing and Law Enforcement}
+Police officers are charged with enforcing the laws of the state upon those who do not or will not obey the prohibitionist drug laws. The public has demanded the police respond “zero tolerance” towards heroin users. In response to police activity, both sellers and users have developed various techniques for hiding drugs when police up. Drug sellers have an array of strategies for concealing their business activities from police, non-using neighbors, and from other heroin users.
+Above all, the explanations of the current level which opioid use got to are various and complex. Some policies may have side effect, therefore the government should carefully select policy.
+
+\subsection{Short-term Policy: Reducing the Natural Growth Rate of Major Domain}
+In Section 4.2, we use the Lotka-Volterra equations to simulate the interactions between different clusters. This model prerequisite the environment is stable and thus not considering changes. So it is only suitable for short-term prediction. We utilize it to guide our short-term policy.
+
+For each species-i, leaving out other sepcies' influence, it has a natural growth rate $a_{i}$ of itself. Therefore, the first idea is to decrease the $a_{i}$ for regions. For instance, enforcing laws to penalize non-prescription use of drugs more strongly, from Fig. \ref{Fig14}, the dash line represents drug-use of restricting $a_{i}$, and the effect is significant.
+
+\begin{figure}[H]
+	\centering %图片全局居中
+	%并排几个图，就要写几个minipage
+	\begin{minipage}[b]{0.48\textwidth} %所有minipage宽度之和要小于1，否则会自动变成竖排
+		\centering %图片局部居中
+		\includegraphics[scale=0.6]{./figures/13.png} %此时的图片宽度比例是相对于这个minipage的，不是全局
+		% \caption{}
+	\end{minipage}
+	\begin{minipage}[b]{0.48\textwidth} %所有minipage宽度之和要小于1，否则会自动变成竖排
+		\centering %图片局部居中
+		\includegraphics[scale=0.6]{./figures/14.png}%此时的图片宽度比例是相对于这个minipage的，不是全局
+		% \caption{}
+	\end{minipage}
+	\caption{Drug Reports Change Before Policy(BP) and After Policy(AP) in Policy-Implemented Areas(left) and Other Areas(right)}
+	\label{Fig14}
+\end{figure}
+
+However, Fig. \ref{Fig14} simultaneously demonstrates that when one area implements policies, adjacent areas without proper measures will face boom of drug-use crisis. This can be explained that people influenced in areas policy-implemented area will migrate there and more drugs may flow there after. Thereby, policies should be considered nationally, such as limiting opioids import, enforcing laws and more relevant policies. Fig. \ref{Fig16} proves the practicality.
+
+\begin{figure}[H]
+	\centering
+	\includegraphics[scale=0.7]{./figures/16.png}
+	\caption{Policies in an national scale}
+	\label{Fig16}
+\end{figure}
+
+\subsection{Long-term Policy: Reducing the Natural Growth Rate Nationally}
+
 \section{Strengths and Weaknesses}
 \subsection{Strengths}
 \begin{itemize}
     \item Our model takes the idea of clustering, which overcomes the disadvantages of analysing either the whole state or one single county.
-    \item We take several measures to process the dataset and make it convenient for use, while the authenticity and integrity of data is still maintained.
+    \item We take several measures to process the data and make it convenient for use, while the authenticity and integrity of data is still maintained.
 \end{itemize}
 
 \subsection{Weaknesses}
@@ -574,7 +641,7 @@ By calculating, we get the next 50 years of drug reports in different clusters.
 \section{The Source Codes}		% 附录标题可以自行修改
 
 
-This python program implements k-means clustering.
+This python program implements K-means clustering.
 \lstinputlisting[language={python}, caption=\texttt{k-means.py}]{../code/k-means.py}
 % \inputpython{../code/k-means.py}{0}{68}
 
