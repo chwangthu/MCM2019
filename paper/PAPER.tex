@@ -168,17 +168,17 @@ With the k-means cluster analysis, we acquire data about the synthetic opioid an
 The regular drug-use pattern is identical to the Logistic model of population growth, in which the natural growth rate of the population will be limited by the population. Similarly, the drug-use will be limited by many restrictions including social factors such as government control and natural factors such as population growth. Assuming that drug-use level could be affected by these factors and thus having a ceiling, it can be considered that the growth trend of synthetic opioid and heroin events are subordinated to the Logistic model. Here’s the Logistic model:
 \begin{equation}
 	\begin{split}
-	\frac{dN(t)}{dt} = r&(1-\frac{N(t)}{K})N(t) \label{logistic}\\
-	N(t_{0}) &= N_{0}
+	\frac{du(t)}{dt} = r&(1-\frac{u(t)}{K})u(t) \label{logistic}\\
+	u(t_{0}) &= u_{0}
 	\end{split}
 \end{equation}
 
-where $N(t)$ represents the drug-use amount time $t$, $K$ represents the upper bound of the drug-use level and $r$ means an influence factor of the drug-use amount. The model can be understood that there is no strict control and the drug is attractive in the early time, which results in the quickly increase of the drug use. As some departments begin to pay attention to this phenomenon and implement policies to control it, the growth rate of drug use begins to decrease. When the drug-use level is close to the allowable upper bound, $\frac{(1-Q)}{K} \approx 0$ . At this point, the drug-use level will no longer increase. Considering that our model is discrete in time,  we replace $\frac{dN(t)}{dt}$ with $N(t+1)-N(t)$.
+where $u(t)$ represents the drug-use amount time $t$, $K$ represents the upper bound of the drug-use level and $r$ means an influence factor of the drug-use amount. The model can be understood that there is no strict control and the drug is attractive in the early time, which results in the quickly increase of the drug use. As some departments begin to pay attention to this phenomenon and implement policies to control it, the growth rate of drug use begins to decrease. When the drug-use level is close to the allowable upper bound, $\frac{(1-Q)}{K} \approx 0$ . At this point, the drug-use level will no longer increase. Considering that our model is discrete in time,  we replace $\frac{du(t)}{dt}$ with $N(t+1)-u(t)$.
 
 The following equations gives the solution of logistic regression (Equation (\ref{logistic})).
 \begin{gather}
-	N(t)=\frac{K}{1+Ce^{-r(t-t_{0})}} \\
-	C=\frac{K-N_{0}}{N_{0}} 
+	u(t)=\frac{K}{1+Ce^{-r(t-t_{0})}} \\
+	C=\frac{K-u_{0}}{u_{0}} 
 \end{gather}
 The above mathematical formulas and model can be established by programing. We utilize the data of ten clusters to buildthe model and acquire the logistic regressing curves.
 
@@ -190,13 +190,13 @@ In order to test the effectiveness of our model, we first put the total drug rep
 	%并排几个图，就要写几个minipage
 	\begin{minipage}[b]{0.45\textwidth} %所有minipage宽度之和要小于1，否则会自动变成竖排
 		\centering %图片局部居中
-		\includegraphics[scale=0.39]{./figures/1.png} %此时的图片宽度比例是相对于这个minipage的，不是全局
+		\includegraphics[scale=0.45]{./figures/1.png} %此时的图片宽度比例是相对于这个minipage的，不是全局
 		\caption{Total Drug Reports Curves of Unsuitable Clusters}
 		\label{Fig.1}
 	\end{minipage}
 	\begin{minipage}[b]{0.45\textwidth} %所有minipage宽度之和要小于1，否则会自动变成竖排
 		\centering %图片局部居中
-		\includegraphics[scale=0.4]{./figures/2.png}%此时的图片宽度比例是相对于这个minipage的，不是全局
+		\includegraphics[scale=0.5]{./figures/2.png}%此时的图片宽度比例是相对于这个minipage的，不是全局
 		\caption{Total Drug Reports Curves of Suitable Clusters}
 		\label{Fig.2}
 	\end{minipage}
@@ -211,22 +211,22 @@ In order to test the effectiveness of our model, we first put the total drug rep
 
 According to fitted curves of the remaining data, we obtain the curves of drug-use level for 20 years from 2000 to present. Then, we look for intersections of every curve and the time axis. Fig. \ref{Fig.2} describes most clusters’ characteristics of total drug use.
 
-We can clearly see that Cluster-2, where drug cases have started since 1999, is earlier than any other six clusters and this is exactly our target to find in specific opioids in most clusters. Consulting the map of U.S., we know that Cluster-2 represents Washington area.
+We can clearly see that Cluster-2, where drug cases have started since 1999, is earlier than any other six clusters and this is exactly our target to find in specific opioids in most clusters. Consulting the map of U.S., we know that Cluster-2 represents east of West Virginia area.
 
 Therefore, we further make use of this model to analyze the usage of heroin and synthetic opioids screened in data screening and acquire the following results.
 
 \begin{figure}[H]
 	\centering %图片全局居中
 	%并排几个图，就要写几个minipage
-	\begin{minipage}[b]{0.45\textwidth} %所有minipage宽度之和要小于1，否则会自动变成竖排
+	\begin{minipage}[b]{0.48\textwidth} %所有minipage宽度之和要小于1，否则会自动变成竖排
 		\centering %图片局部居中
-		\includegraphics[scale=0.39]{./figures/3.png} %此时的图片宽度比例是相对于这个minipage的，不是全局
+		\includegraphics[scale=0.45]{./figures/3.png} %此时的图片宽度比例是相对于这个minipage的，不是全局
 		\caption{Drug Reports for Heroin}
 		\label{Fig.3}
 	\end{minipage}
-	\begin{minipage}[b]{0.45\textwidth} %所有minipage宽度之和要小于1，否则会自动变成竖排
+	\begin{minipage}[b]{0.48\textwidth} %所有minipage宽度之和要小于1，否则会自动变成竖排
 		\centering %图片局部居中
-		\includegraphics[scale=0.5]{./figures/4.png}%此时的图片宽度比例是相对于这个minipage的，不是全局
+		\includegraphics[scale=0.6]{./figures/4.png}%此时的图片宽度比例是相对于这个minipage的，不是全局
 		\caption{Drug Reports for Syntheic Opioids}
 		\label{Fig.4}
 	\end{minipage}
@@ -253,7 +253,7 @@ What’s more, we use the logistic discrete equation to solve the coefficients o
 \end{table}
 
 \subsection{Iterative Lokta-Volterra Model to describe the spread and characteristics}
-In the last section 4.1, we construct Logistic Model to identify the possible locations where specific opioid use might have started. However, as the number of drug reports approaches the carrying capacity $N_{max}$, the Logistic Model become smooth and can’t provide more information about the changing trends. Therefore, in this section, we modify the dynamic Lotka-Volterra equations to model the interactions between different clusters.
+In the last section 4.1, we construct Logistic Model to identify the possible locations where specific opioid use might have started. However, as the number of drug reports approaches the carrying capacity $u_{max}$, the Logistic Model become smooth and can’t provide more information about the changing trends. Therefore, in this section, we modify the dynamic Lotka-Volterra equations to model the interactions between different clusters.
 	
 The Lotka-Volterra equations are known as the predator-prey equations in a biological system of two (or more) species. In fact, the Lotka-Volterra equations can describe not only the predation relationships between species, but also the competition, parasitism even mutualism relationships. And we think the spread of the reported synthetic opioid and heroin incidents may have a mixed features, which meets the application conditions.
 
@@ -437,27 +437,27 @@ According to the logistic model, we have obtained tolerances for drug-use levels
 
 \begin{figure}[H]
 	\centering
-	\includegraphics[scale=0.5]{./figures/5.png}
+	\includegraphics[scale=0.7]{./figures/5.png}
 	\caption{Trend of the Next 5 Years}
 	\label{Fig5}
 \end{figure}
 
 In the above figure, we know that the number of drug use in some areas is decreasing annually or being stable at a relatively low value. So it can be considered that drug usage will not exceed its threshold level in the next few years, and the government does not need to be concerned about these areas, hence we no longer make their curves. Now we focus on clusters with clearly upward drug-use trends. The first goal is to find the intersection of the drug threshold level and the rising curve in order to make a judgement on whether government should take actions. The following figures clearly demonstrates what has been mentioned.
 
-We can see that both Cluster-2 and Cluster-7, which represent Washington, West Virginia and part of Pennsylvania, exceed the drug threshold levels. Cluster-2 will reach the threshold level 2018, which indicates that local government should take measures as much quickly as possible. And Cluster-7 will reach the threshold a few years later, around 2021. Also, it shows that the rising trend still maintains for the following years. So it can be considered that drug use may be uncontrolled in these two regions when the levels are exceeded. Thus, it is urgent for the government to adopt effective measures in advance.
+We can see that both Cluster-2 and Cluster-7, which represent east of West Virginia and part of Pennsylvania, exceed the drug threshold levels. Cluster-2 will reach the threshold level 2018, which indicates that local government should take measures as much quickly as possible. And Cluster-7 will reach the threshold a few years later, around 2021. Also, it shows that the rising trend still maintains for the following years. So it can be considered that drug use may be uncontrolled in these two regions when the levels are exceeded. Thus, it is urgent for the government to adopt effective measures in advance.
 
 \begin{figure}[H]
 	\centering %图片全局居中
 	%并排几个图，就要写几个minipage
-	\begin{minipage}[b]{0.45\textwidth} %所有minipage宽度之和要小于1，否则会自动变成竖排
+	\begin{minipage}[b]{0.48\textwidth} %所有minipage宽度之和要小于1，否则会自动变成竖排
 		\centering %图片局部居中
-		\includegraphics[scale=0.37]{./figures/6.png} %此时的图片宽度比例是相对于这个minipage的，不是全局
+		\includegraphics[scale=0.45]{./figures/6.png} %此时的图片宽度比例是相对于这个minipage的，不是全局
 		\caption{Threshold levesl of Cluster-1 and Cluster-3}
 		\label{Fig6}
 	\end{minipage}
-	\begin{minipage}[b]{0.45\textwidth} %所有minipage宽度之和要小于1，否则会自动变成竖排
+	\begin{minipage}[b]{0.48\textwidth} %所有minipage宽度之和要小于1，否则会自动变成竖排
 		\centering %图片局部居中
-		\includegraphics[scale=0.37]{./figures/7.png}%此时的图片宽度比例是相对于这个minipage的，不是全局
+		\includegraphics[scale=0.45]{./figures/7.png}%此时的图片宽度比例是相对于这个minipage的，不是全局
 		\caption{Threshold Levels of Cluster-2 and Cluster-7}
 		\label{Fig7}
 	\end{minipage}
@@ -467,7 +467,7 @@ We can see that both Cluster-2 and Cluster-7, which represent Washington, West V
 However, the Modified Lotka-Volterra Model we construct is an unstable differential equations. As time goes on, the differential equations system show chaotic phenomena. Every 20 years, all the values of 10 clusters fluctuate severely and then suddenly converge to 0. Fig. \ref{Fig8} depicts the trend of opioid and heroin incidents in the 10 clusters for the next 50 years.
 \begin{figure}[H]
 	\centering
-	\includegraphics[scale=0.45]{./figures/8.png}
+	\includegraphics[scale=0.6]{./figures/8.png}
 	\caption{Trend of the Next 50 Years}
 	\label{Fig8}
 \end{figure}
@@ -544,7 +544,7 @@ As we can see from Fig. \ref{Fig9}, part of those factors are strongly correlate
 
 Fig. \ref{Fig11} demonstrates the major influential factors. We observe that the influencing factors differ by regions, based on the locations of five states and ten clusters in the map. \ref{Fig11}. So we categorize these influencing factors on a geographical basis, which are presented in \ref{Fig11}.
 
-It is obvious that immigration plays a decisive role in Cluster-2, 8, and 9 near the East Coast. This is not difficult to understand, because many immigrants started locating in the east coast of the United States ever since Columbus discovered the Americas. The immigration culture and degree also determine their preference and use of drugs to some extent. At the same time, the drug-use level in the Washington area is related to veterans, which can be speculated in the light of the fact that military power concentrates in Washington, DC. 
+It is obvious that immigration plays a decisive role in Cluster-2, 8, and 9 near the East Coast. This is not difficult to understand, because many immigrants started locating in the east coast of the United States ever since Columbus discovered the Americas. The immigration culture and degree also determine their preference and use of drugs to some extent. At the same time, the drug-use level in the east of West Virginia area is related to veterans, which can be speculated in the light of the fact that military power concentrates in its vincWashington, DC. 
 
 The main influence factor in the central region is the level of education. Since there are various institutions of high level in these regions (Cluster-1, 5, 7, 10), we can conclude that education is also closely related to drug use. As forwestern regions of the five states, family composition could be the main reason. Based on common knowledge, there is a certain relationship between drug crime, family background and growing environment, the result is convincing.
 
@@ -589,7 +589,7 @@ where $\lambda(t) = \frac{ln(t)}{1+ln(t)}$.
 By calculating, we get the next 50 years of drug reports in different clusters. 
 \begin{figure}[H]
 	\centering
-	\includegraphics[scale=0.7]{./figures/12.png}
+	\includegraphics[scale=0.8]{./figures/12.png}
 	\caption{}
 	\label{Fig12}
 \end{figure}
