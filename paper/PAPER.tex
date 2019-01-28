@@ -14,6 +14,7 @@
 \title{\large God or evil? A ... model analysing and predicting opioid use}  % 标题
 \setlength\parindent{0pt} %default no indent
 \newcommand{\upcite}[1]{\textsuperscript{\textsuperscript{\cite{#1}}}}
+\renewcommand{\figurename}{Fig.}
 % 如您参加的是ICM（即选择了D/E/F题），请使用以下的命令修改Summary Sheet题头
 % \renewcommand{\contest}{Interdisciplinary Contest in Modeling (ICM) Summary Sheet}
 
@@ -42,14 +43,13 @@ We do such things ...
     \item We do ...
 \end{enumerate}
 
-\section{Assumptions and Nomenclature}
 \subsection{Assumptions}
 Given the lack of data and limitation of our knowledge, we made the following assumption:
 \begin{itemize}
     \item We assume that the data after processing is robust for futher use.
 \end{itemize}
 
-\subsection{Notations}
+\section{Notations}
 The primary notations used in this paper are listed in \textbf{Table \ref{tb:notation}}.
 \begin{table}[!htbp]
 \begin{center}
@@ -69,28 +69,10 @@ The primary notations used in this paper are listed in \textbf{Table \ref{tb:not
 
 \section{Data Processing}
 We are provided with two types of data, the number of drug reports in categories and socio-economic factors. Both of them are specific to counties. The original data contains a lot of redundant and invalid items, which can seriously affect the accuracy and versatility of our model. Thereby, we first apply some data processing techniques before we construct the model.
+
 \subsection{Missing Data Processing}
 % In US, each county is assigned a unique five-digit code called FIPS county code. 
 In the worksheet about socio-economic factors, there are many cells that contain no valid information at all. We delete columns and rows which contains a lot of useless cells. For other columns and rows, when invalid items appear, we replace it with the average value of the entire sequence.
-
-\subsection{Clustering Counties of Five States}
-Since we have detailed number of drug reports, it is not hard to fit a curve to observe the trend of opioid use for each state and for each county. However, we consider this method inappropriate. On the one hand, the sample for only one county is normally fluctuating irregularly, i.e. drug reports of heroin in ACCOMACK, VA was 2, 38, 6 during 2012-2014. It is unnecessary and meaningless to bulid a model when facing such fluctuation. On the other hand, given the large number of all kinds of opioids, even one type change significantly, it is not obvious when viewed as the level of the whole state.
-
-% \begin{figure}[htbp]
-% \centering        %居中
-% \subfigure[name of the subfigure]{ %第一张子图
-% 	\begin{minipage}{7cm}\centering   %子图居中
-% 		\includegraphics[scale=0.5]{./figures/1.png}  %以pic.jpg的0.5倍大小输出
-% 	\end{minipage}}
-% \subfigure[name of the subfigure]{ %第二张子图
-% 	\begin{minipage}{7cm}\centering %子图居中
-% 		\includegraphics[scale=0.3]{./figures/2.png}  %以pic.jpg的0.5倍大小输出
-% 	\end{minipage}}
-% \caption{name of the figure} %%大图名称
-% \label{fig:1} %图片引用标记
-% \end{figure}
-
-Considering that state and county are not suitable for our research, a unit in between is introduced. We put counties on a two-dimensional plane and regard them as nodes. Then, k-means clustering method\upcite{1}, which aims to partion nodes into k clusters minimizing the within-cluster sum of squares, was performed. In our case, we take $k = 10$. The distance of two counties can be computed with their latitude and longtitude retrieved from U.S. Census Bureau\upcite{2}. %TODO: Add cluster figure
 
 \subsection{Combine variables of a Socio-economic Factor}
 For every year from 2010 to 2016, there are a list of variables about one single socio-economic factor. For instance, factor ANCERSTRY includes estimate, estimate margin of error, percent, etc. Those variables all reflect some information of the target factor in some aspects, hence how to rank their importance matters. 
@@ -109,76 +91,91 @@ We apply EWM in the way addressed as follows (Using ANCERSTRY as an example):
 \end{itemize}
 So far, we have combined several variables of a factor into one $y'_{i}$, and the same can be done to other factors. The newly generated sequence will be reserved for further analysis.
 
+\subsection{Cluster Counties of Five States}
+Since we have detailed number of drug reports, it is not hard to fit a curve to observe the trend of opioid use for each state and for each county. However, we consider this method inappropriate. On the one hand, the sample for only one county is normally fluctuating irregularly, i.e. drug reports of heroin in ACCOMACK, VA was 2, 38, 6 during 2012-2014. It is unnecessary and meaningless to bulid a model when facing such fluctuation. On the other hand, given the large number of all kinds of opioids, even one type change significantly, it is not obvious when viewed as the level of the whole state.
+
+Considering that state and county are not suitable for our research, a unit in between is introduced. We put counties on a two-dimensional plane and regard them as nodes. Then, k-means clustering method\upcite{1}, which aims to partion nodes into k clusters minimizing the within-cluster sum of squares, was performed. In our case, we take $k = 10$. The distance of two counties can be computed with their latitude and longtitude retrieved from U.S. Census Bureau\upcite{2}. The clusters we derived are labeled as Cluster 1, Cluster 2, ..., Cluster 10.%TODO: Add cluster figure
+
+\subsection{Data Screening -- Drug Classification}
+In order to describe the dissemination and characteristics of the synthetic opioids and heroin spread sperately, we need to screen the information in MCM\_NFLIS\_Data.xlsx. By consulting Wikipedia, DrugBank\upcite{4} and other websites, provided drugs are roughly classified into synthetic opioids, semi-synthetic opioids, and natural ingredients. In view of the topic requirements, we excluded the natural ingredients and drugs other than heroin in semi-synthetic opioids, leaving the drug reports of heroin and synthetic opioids only. As for the synthetic opioid, we find that many drugs have been used in small amounts over the years compared to those used in large numbers. And some drugs only start to appear in the past two years, so we can just ignore them. Finally, we leave about 15 kinds of synthetic drugs that have appeared since 2010 for further research.
+
 \section{Model Construction}
-\subsection{Logistic Model to Identify Locations}
-\subsubsection{Data Screening}
-In order to solve the problem in Part 1 and describe the dissemination and characteristics of the synthetic opioids and heroin events over time, which are reported between five states and counties, we need to screen the information in MCM\_NFLIS\_Data.xlsx. By consulting Wikipedia, DrugBank and other websites, provided drugs are roughly classified into synthetic opioids, semi-synthetic opioids, and natural ingredients. In view of the topic requirements, we excluded the natural ingredients and drugs other than heroin in semi-synthetic opioids, leaving the drug reports of heroin and synthetic opioids only. As for the synthetic opioid drug reports, we find that many drugs have been used in small amounts over the years compared to those used in large numbers by using the function of screen and statistic of the EXCEL. Even some drugs are new, which have appeared in the past two years, so we can almost ignore them for there’s hardly any help. Finally, we leave about 15 kinds of synthetic drugs that have appeared since 2010 for model research.
-
+\subsection{Identify Locations using Logistic Regression}
 \subsubsection{Model Establishment}
-With the K-means cluster analysis, we acquire data about the synthetic opioid and heroin events in ten clusters. It is known that the drug use levels in most areas are increasing. Considering that these data will not grow endlessly over time, it will bring about the corresponding effects mentioned in the topic introduction when a certain threshold is exceeded, resulting in a series of social problems. Therefore, government’s relevant departments, including the Drug Enforcement Administration(DEA), will take corresponding measures to control the growth trend of drug use. When consumptions are too high (N(t) is relatively large), however the rate of change in usage will reduce. when drug-use levels are low, the rate of change is gradually increasing.
+With the K-means cluster analysis, we acquire data about the synthetic opioid and heroin events in ten clusters. It is clear to identify that the drug use levels in most areas are increasing. If drug use continues to grow at such speed, it will bring about numerous negative effects to the society when it exceeds an certain level, as mentioned in the Problem Background. Therefore, government’s relevant departments, including the Drug Enforcement Administration(DEA), will take corresponding measures to control the growing trend of drug use. However, when consumptions reach a high level, the growing rate in usage will reduce. And it is gradually increasing when consumptions are low.
 
-The regular pattern is consistent with the Logistic model of population growth. In that model, the natural growth rate of the population will be limited by the population. Similarly, the drug-use level will be limited by the government’s allowable upper limit. Assuming that the government can come up with effective controlling measures according to the drug-use level, it can be considered that the growth trend of synthetic opioid and heroin events are subordinated to the Logistic model. Here’s the Logistic growth model:
-% \begin{equation}
+This regular drug-use pattern is consistent with the Logistic model of population growth, in which the natural growth rate of the population will be limited by the population. Similarly, the drug-use will be limited by the government’s allowable upper bound. Assuming that the government can come up with effective controlling measures according to the drug-use level, it can be considered that the growth trend of synthetic opioid and heroin events are subordinated to the Logistic model. Here’s the Logistic model:
 \begin{gather}
-	\frac{dN(t)}{dt} = r(1-\frac{N(t)}{K})N(t) \\
+	\frac{dN(t)}{dt} = r(1-\frac{N(t)}{K})N(t) \label{logistic}\\
 	N(t_{0}) = N_{0}
 \end{gather}
+where $N(t)$ represents the drug-use amount time $t$, $K$ represents the upper bound of the drug-use level and $r$ means an influence factor of the drug-use amount. Here we choose $r=1$. The model can be understood that there is no strict control and the drug is attractive in the early time, which results in the quickly increase of the drug use. As some departments begin to pay attention to this phenomenon and implement policies to control it, the growth rate of drug use begins to decrease. When the drug-use level is close to the allowable upper bound, $\frac{(1-Q)}{K} \approx 0$ . At this point, the drug-use level will no longer increase. Considering that our model is discrete in time,  we replace $\frac{dN(t)}{dt}$ with $N(t+1)-N(t)$.
 
-where 'N(t)' represents the drug-use amount at some time, 'K' represents the upper limit of the drug-use level, which is allowed in an area. The 'r' is an influence factor of the drug-us amount. The model can be understood that there is no strict control and the drug is attractive in the early time, which results in the quickly increase of the drug use. As some departments begin to pay attention to this phenomenon and implement policies to control it, the growth rate of drug use begins to decrease. When the drug-use level is close to the allowable upper limit, $\frac{(1-Q)}{K} \approx 0$ . At this point, the drug-use level will no longer increase. Considering the discretization of the model and data, $\frac{dN(t)}{dt}$ is the increasing amount between two years.
-
-For the solution of the logistic model, the following formula is given.
+The following equations gives the solution of logistic regression (Equation (\ref{logistic})).
 \begin{gather}
-	N(t)=\frac{K}{1+Ce^(-r(t-t_{0}))} \\
+	N(t)=\frac{K}{1+Ce^{-(t-t_{0})}} \\
 	C=\frac{K-N_{0}}{N_{0}} 
 \end{gather}
-
-The above mathematical formulas and model could be established by programing. We bring the data of ten clusters into the model and acquire the logistic regressing curves.
+The above mathematical formulas and model can be established by programing. We utilize the data of ten clusters to buildthe model and acquire the logistic regressing curves.
 
 \subsubsection{Model Application and Solving Problems}
-In order to test the effectiveness of our model, we first put the total drug reports into the model for regressing and fitting, and get the following results. From the above clusters mentioned, the drug-use level in some areas is decreasing or fluctuating, we find three unsuitable clusters(cluster 4, cluster 5, cluster 10) and the following figure can show that those data are not suitable in this model. Therefore we cannot use the Logistic population growth model to perform regression of these areas’ drug reports. That is to say, other models may be needed for prediction to them, which is not considered here.
-
-\begin{figure}[H]
-	\centering
-	\includegraphics[scale=0.6]{./figures/1.png}
-	\caption{Total Drug Reports Curves of Unsuitable Clusters}
-\end{figure}
-
-According to fitted curves of those suitable data, we obtain the curves of drug-use level for 20years from 2000 to the present and find intersections of every curve and the time axis. Here’s the figure following, which describe most clusters’ characteristics of total drug use.
-\begin{figure}[H]
-	\centering
-	\includegraphics[scale=0.6]{./figures/2.png}
-	\caption{Total Drug Reports Curves of Suitable Clusters}
-\end{figure}
-
-We can clearly see that cluster 2, where drug cases have started since 1999, is earlier than other six clusters and this is exactly our target to find in specific opioids in most clusters.
-
-Therefore, we make use of this model to analyze the usage of heroin and synthetic opioids screened in data screening and acquire the following results.
+In order to test the effectiveness of our model, we first put the total drug reports into the model for regressing and fitting, and get the following results. From the above clusters mentioned, the drug-use level in some areas is decreasing or fluctuating, we find three unsuitable clusters(Cluster 4, Custer 5, Cluster 10) and the Fig. \ref{Fig.1} can show that those data are not suitable in this model. Therefore we cannot use the Logistic population growth model to perform regression of these areas’ drug reports. That is to say, other models may be needed for thier prediction, which is not considered currently.
 
 \begin{figure}[H]
 	\centering %图片全局居中
 	%并排几个图，就要写几个minipage
 	\begin{minipage}[b]{0.45\textwidth} %所有minipage宽度之和要小于1，否则会自动变成竖排
-	\centering %图片局部居中
-	\includegraphics[scale=0.5]{./figures/3.png} %此时的图片宽度比例是相对于这个minipage的，不是全局
-	\caption{Drug Reports for Heroin}
-	\label{Fig.1}
+		\centering %图片局部居中
+		\includegraphics[scale=0.39]{./figures/1.png} %此时的图片宽度比例是相对于这个minipage的，不是全局
+		\caption{Total Drug Reports Curves of Unsuitable Clusters}
+		\label{Fig.1}
 	\end{minipage}
 	\begin{minipage}[b]{0.45\textwidth} %所有minipage宽度之和要小于1，否则会自动变成竖排
-	\centering %图片局部居中
-	\includegraphics[scale=0.5]{./figures/4.png}%此时的图片宽度比例是相对于这个minipage的，不是全局
-	\caption{Drug Reports for Syntheic Opioids}
-	\label{Fig.2}
+		\centering %图片局部居中
+		\includegraphics[scale=0.4]{./figures/2.png}%此时的图片宽度比例是相对于这个minipage的，不是全局
+		\caption{Total Drug Reports Curves of Suitable Clusters}
+		\label{Fig.2}
 	\end{minipage}
 \end{figure}
 
-As we can see from the above figure, the cluster 8 in the ten clusters has already started using heroin drugs before 2000. It can be considered that the area which cluster 8 represents could be the location where heroin started to appear and use.
+% \begin{figure}[H]
+% 	\centering
+% 	\includegraphics[scale=0.6]{./figures/1.png}
+% 	\caption{Total Drug Reports Curves of Unsuitable Clusters}
+% 	\label{Fig.1}
+% \end{figure}
 
-In this figure, it can be seen that cluster 1, 3, 7, 8, and 9 all started using drugs in the vicinity of 2001. Because the time accuracy is not particularly precise, they may all be the areas where synthetic opioids were used earlier. According to our model, we believe that the XXX represented by cluster 3 is the area where the synthetic opioids use have started earlier, and the other XXX represented by other clusters(1,7,8 and 9) may also be areas that have already been used.
+According to fitted curves of the remaining data, we obtain the curves of drug-use level for 20 years from 2000 to present. Then, we look for intersections of every curve and the time axis. Fig. \ref{Fig.2} describes most clusters’ characteristics of total drug use.
+
+We can clearly see that Cluster 2, where drug cases have started since 1999, is earlier than any other six clusters and this is exactly our target to find in specific opioids in most clusters.
+
+Therefore, we further make use of this model to analyze the usage of heroin and synthetic opioids screened in data screening and acquire the following results.
+
+\begin{figure}[H]
+	\centering %图片全局居中
+	%并排几个图，就要写几个minipage
+	\begin{minipage}[b]{0.45\textwidth} %所有minipage宽度之和要小于1，否则会自动变成竖排
+		\centering %图片局部居中
+		\includegraphics[scale=0.39]{./figures/3.png} %此时的图片宽度比例是相对于这个minipage的，不是全局
+		\caption{Drug Reports for Heroin}
+		\label{Fig.3}
+	\end{minipage}
+	\begin{minipage}[b]{0.45\textwidth} %所有minipage宽度之和要小于1，否则会自动变成竖排
+		\centering %图片局部居中
+		\includegraphics[scale=0.5]{./figures/4.png}%此时的图片宽度比例是相对于这个minipage的，不是全局
+		\caption{Drug Reports for Syntheic Opioids}
+		\label{Fig.4}
+	\end{minipage}
+\end{figure}
+
+As we can see from Fig. \ref{Fig.3}, the Cluster 8 in the ten clusters has already started using heroin drugs before 2000. It can be considered that counties which belongs to Cluster 8 could be the locations where heroin started to appear and use.
+
+In Fig. \ref{Fig.4}, it can be seen that Cluster 1, 3, 7, 8, and 9 all started using drugs around 2001. Because the time accuracy is not particularly precise, they may all be the areas where synthetic opioids were used earlier. According to our model, we believe that the TODO represented by Cluster 3 is the area where the synthetic opioids use have started earlier, and the other TODO represented by other clusters(Cluster 1,7,8 and 9) may also be areas that have already been used.
 
 \section{Strengths and Weaknesses}
 \subsection{Strengths}
 \begin{itemize}
-    \item Our model takes the idea of clustering, which overcomes the difficulty of analysing either the whole state or one single county.
+    \item Our model takes the idea of clustering, which overcomes the disadvantages of analysing either the whole state or one single county.
     \item We take several measures to process the dataset and make it convenient for use, while the authenticity and integrity of data is still maintained.
 \end{itemize}
 
