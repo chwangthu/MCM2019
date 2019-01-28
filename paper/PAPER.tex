@@ -55,7 +55,7 @@ The primary notations used in this paper are listed in \textbf{Table \ref{tb:not
 \begin{table}[!htbp]
 \begin{center}
 \caption{Notations}
-\begin{tabular}{cl}
+\begin{tabular}{cc}
 	\toprule
 	\multicolumn{1}{m{3cm}}{\centering Symbol}
 	&\multicolumn{1}{m{8cm}}{\centering Definition}\\
@@ -104,7 +104,23 @@ Considering that state and county are not suitable for our research, a unit in b
 \end{figure}
 
 \subsection{Data Screening -- Drug Classification}
-In order to describe the dissemination and characteristics of the synthetic opioids and heroin spread sperately, we need to screen the information in MCM\_NFLIS\_Data.xlsx. By consulting Wikipedia, DrugBank\upcite{4} and other websites, provided drugs are roughly classified into synthetic opioids, semi-synthetic opioids, and natural ingredients. In view of the topic requirements, we excluded the natural ingredients and drugs other than heroin in semi-synthetic opioids, leaving the drug reports of heroin and synthetic opioids only. As for the synthetic opioid, we find that many drugs have been used in small amounts over the years compared to those used in large numbers. And some drugs only start to appear in the past two years, so we can just ignore them. Finally, we leave about 15 kinds of synthetic drugs that have appeared since 2010 for further research.
+In order to describe the dissemination and characteristics of the synthetic opioids and heroin spread sperately, we need to screen the information in MCM\_NFLIS\_Data.xlsx. By consulting Wikipedia, DrugBank\upcite{4} and other websites, provided drugs are roughly classified into synthetic opioids, semi-synthetic opioids, and natural ingredients(Table \ref{opioid kind}). In view of the topic requirements, we excluded the natural ingredients and drugs other than heroin in semi-synthetic opioids, leaving the drug reports of heroin and synthetic opioids only. As for the synthetic opioid, we find that many drugs have been used in small amounts over the years compared to those used in large numbers. And some drugs only start to appear in the past two years, so we can just ignore them. Finally, we leave about 15 kinds of synthetic drugs that have appeared since 2010 for further research.
+\begin{table}[H]
+	\centering
+	\caption{Opioids and Their Kind}
+	\begin{tabular}{c|l}
+	\hline
+	Kind & Specific Opioids\\
+	\hline
+	Natural Ingredients	& Codeine, Morphine, Opium \\
+	\hline
+	Semi-synthetic Opioids & DIhydrocodeine, Heroine, Opiates, Oxycodone, Oxymorphone\\
+	\hline
+	Synthetic Opioids &  ANPP, Buprenophine, Butorphanol, Fentanyl, Meperidine, Methorphan\\
+	\hline
+	\end{tabular}
+	\label{opioid kind}
+\end{table}
 
 \section{Model Construction}
 \subsection{Identify Locations using Logistic Regression}
@@ -183,6 +199,20 @@ As we can see from Fig. \ref{Fig.3}, the Cluster-8 in the ten clusters has alrea
 In Fig. \ref{Fig.4}, it can be seen that Cluster-1, 3, 7, 8, and 9 all started using drugs around 2001. Because the time accuracy is not particularly precise, they may all be the areas where synthetic opioids were used earlier. According to our model, we believe that the TODO represented by Cluster-3 is the area where the synthetic opioids use have started earlier, and the other TODO represented by other clusters(Cluster-1,7,8 and 9) may also be areas that have already been used.
 
 What’s more, we use the logistic discrete equation to solve the coefficients of the regression, and obtain the maximum tolerance of drug-use in each region based on this model. Results presented presented in the following table will continue to be used in subsequent models.
+\begin{table}[H]
+	\centering
+	\caption{Maximum Tolerance(MT) for Clusters}
+	\begin{tabular}
+	{cccccc}
+	\toprule[1pt]
+	Cluster	& 1 & 2 & 3 & 4 &5 \\
+	MT	& 44101 & 22261 & 1909 & 602 & 2840\\
+	\midrule
+	Cluster	& 6 & 7 &  8 & 9 & 10 \\
+	MT & 2840 & 19022 & 3330 & 4318 & 6084\\
+	\bottomrule[1pt]
+	\end{tabular}
+\end{table}
 
 \subsection{Iterative Lokta-Voltera Model to describe the spread and characteristics}
 In the last section 4.1, we construct Logistic Model to identify the possible locations where specific opioid use might have started. However, as the number of drug reports approaches the carrying capacity $N_{max}$, the Logistic Model become smooth and can’t provide more information about the changing trends. Therefore, in this section, we modify the dynamic Lotka-Volterra equations to model the interactions between different clusters.
@@ -349,7 +379,7 @@ In order to get the iterative matrix $\bm{A}$, we use the least square method to
 	\bm{U}(\bm{t}+\frac{1}{2}) = \cfrac{\bm{U}(\bm{t}+1) + \bm{U}(\bm{t})}{2}
 \end{equation}
 
-Fig. \ref{Fig5} depicts the trend of opioid and heroin incidents in the 10 clusters for the next 7 years.
+Fig. \ref{Fig5} depicts the trend of opioid and heroin incidents in the 10 clusters for the next 5 years.
 \begin{figure}[H]
 	\centering
 	\includegraphics[scale=0.5]{./figures/5.png}
@@ -361,7 +391,7 @@ According to the logistic model, we have obtained tolerances for drug-use levels
 
 In the above figure, we know that the trend of drug use in some areas is decreasing year by year or stable at a relatively low value. So it can be considered that the drug usage will not exceed its threshold level for the next few years, and the government does not need to worry about these areas. Here we will no longer make these curves. Now we need to study several clusters with clearly upward trends, and we need to find the intersection of the drug threshold level and the rising curve in order to make a judgement about whether government should take actions. The following figures also clearly reflect this feature.
 
-We can see that both Cluster-2 and 7 exceed the drug threshold levels. Cluster 2 will reach the threshold level 2018, which is said that government should take measures as much as quickly to prevent this area’s problems. And Cluster-7 will reach the level few years later, around 2021. Also, it shows that their trends in the following years are still increasing. At this time, it can be considered that drug use may be uncontrolled in these two regions when the levels are exceeded. Thus, the government needs to adopt measures in advance and pay attention to the growth of drug use levels in these two areas earlier.
+We can see that both Cluster-2 and 7 exceed the drug threshold levels. Cluster-2 will reach the threshold level 2018, which is said that government should take measures as much as quickly to prevent this area’s problems. And Cluster-7 will reach the level few years later, around 2021. Also, it shows that their trends in the following years are still increasing. At this time, it can be considered that drug use may be uncontrolled in these two regions when the levels are exceeded. Thus, the government needs to adopt measures in advance and pay attention to the growth of drug use levels in these two areas earlier.
 
 \begin{figure}[H]
 	\centering %图片全局居中
@@ -384,7 +414,7 @@ We can see that both Cluster-2 and 7 exceed the drug threshold levels. Cluster 2
 However, the Modified Lotka-Volterra Model we construct is an unstable differential equations. As time goes on, the differential equations system show chaotic phenomena. Every 20 years, all the values of 10 clusters fluctuate severely and then suddenly converge to 0. Fig. \ref{Fig8} depicts the trend of opioid and heroin incidents in the 10 clusters for the next 50 years.
 \begin{figure}[H]
 	\centering
-	\includegraphics[scale=0.5]{./figures/8.png}
+	\includegraphics[scale=0.45]{./figures/8.png}
 	\caption{Trend of the Next 50 Years}
 	\label{Fig8}
 \end{figure}
@@ -401,7 +431,7 @@ The reasons for the model failure are as follows:
 	A_{4}(\frac{b_{1}a_{2} - a_{1}b_{2}}{c_{1}b_{2}-b_{1}c_{2}}, \frac{c_{1}a_{2}-a_{1}c_{2}}{b_{1}c_{2}-c_{1}b_{2}}) 
 \end{gather*}
 
-The first three equilibrium points contain the coordinate 0, however each species shouldn’t extinct, which is inconsistent with reality. The reasonable equilibrium point $A_{4}$ should meet the conditions:
+The first three equilibrium points contain the coordinate 0, which contrasts the reality that each species shouldn't extinct. The reasonable equilibrium point $A_{4}$ should meet the conditions:
 \begin{gather*}
 	\left \vert 
 	\begin{matrix}
