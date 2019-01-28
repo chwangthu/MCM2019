@@ -3,6 +3,10 @@
 %          PAPER.tex         
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
+%% Reference
+%% Abstract
+%% Appendice
+%% Strength Weakness
 \documentclass[12pt]{article}
 
 % 请在此填写控制号、题号和标题，年份不需要填（自动以当前电脑时间年份为准）
@@ -25,17 +29,31 @@
 
 \section*{Memo}
 \addcontentsline{toc}{section}{Memo}
+\noindent\rule{\textwidth}{0.8pt}
 \textbf{To:} Chief Administrator, NFLIS, DEA \newline
-\textbf{From:} A Group of Modelers \newline
+\textbf{From:} Modelers from Team 1923231\newline
 \textbf{Subject:} Insights and Results During Modeling\newline
 \textbf{Date:} Jan 28, 2019\newline
 \noindent\rule{\textwidth}{0.8pt}
-\indent \textbf{Intention}\newline
-The misuse of opioids has become an national crisis, hence it is urgent to fight against it. Using the dataset provided by your apartment, we aim to address the insights and recommendations for you.
+\subsubsection*{Intention}
+The misuse of opioids has become an national crisis, hence it is urgent to fight against it. We are especially interested in this problem and determined to contribute. Using the dataset provided by NFLIS, we aim to address the insights and recommendations for you.
 
-\indent \textbf{Insights}\newline
+\subsubsection*{Our Work}
+Initially, we use Logistic Regression Model to characterize the trend of opioids use in early stage and identify the maximum number of possible use. This can be used in our second model -- Lotka-Volterra Model when different regions begin to influence each other. It can be used to forecast the use trend in the future. Further, we take socio-economic factors into consideration and find out factors that are decisive for every region.
 
-\indent \textbf{Our Recommendations}\newline
+\subsubsection*{Insights of Dataset}
+During we analyze the dataset, we have the following insights:
+\begin{itemize}
+	\item In the short term, controlling the drug use by force in one region may lead to an increase in the neighboring region.
+	\item In the long term, educational level and family environment such as marital status have paramount effects on drug use.
+\end{itemize}
+
+\subsubsection*{Recommendations}
+Based on our research, we have some recommendations for NEA:
+\begin{itemize}
+	\item Reduce the possibility of making regional policies, take national action instead.
+	\item Promote the educational level and family satisfication of the public, which can be achieved by developing the economic and others.
+\end{itemize}
 \newpage
 
 \section{Introduction}
@@ -109,16 +127,16 @@ We apply EWM in the way addressed as follows (Using ANCERSTRY as an example):
 	\item Compute weight for Estimate, Estimate margin of error, Percent, Percent margin of error of ANCERSTRY: $ W_{j} = \frac{E_{j}}{\sum E_{j}}$, where $W_{j}$ represents the weight for each index.
 	\item Combine variables using the weight: $X_{i} = \sum_{j} W_{j} * y_{ji}$
 \end{itemize}
-So far, we have combined several variables of a factor into one $X_{i}$, and the same can be done to other factors. The newly generated sequence will be reserved for further analysis.
+So far, we have combined several variables of a factor into one $X$, and the same can be done to other factors. The newly generated sequence will be reserved for further analysis.
 
 \subsection{Cluster Counties of Five States}
 Since we have detailed number of drug reports, it is not hard to fit a curve to observe the trend of opioid use for each state and for each county. However, we consider this method inappropriate. On the one hand, the sample for only one county is normally fluctuating irregularly, i.e. drug reports of heroin in ACCOMACK, VA was 2, 38, 6 during 2012-2014. It is unnecessary and meaningless to bulid a model when facing such fluctuation. On the other hand, given the large number of all kinds of opioids, even one type change significantly, it is not obvious when viewed as the level of the whole state.
 
-Considering that state and county are not suitable for our research, a unit in between is introduced. We put counties on a two-dimensional plane and regard them as nodes. Then, K-means clustering method\upcite{1}, which aims to partion nodes into $k$ clusters minimizing the within-cluster sum of squares, was performed. In our case, we take $k = 10$. The distance of two counties can be computed with their latitude and longtitude retrieved from U.S. Census Bureau\upcite{2}. The clusters we derived are labeled as Cluster-1, Cluster-2, ..., Cluster-10.
+Considering that state and county are not suitable for our research, a unit in between is introduced. We put counties on a two-dimensional plane and regard them as nodes. Then, k-means clustering method\upcite{1}, which aims to partion nodes into $k$ clusters minimizing the within-cluster sum of squares, was performed. In our case, we take $k = 10$. The distance of two counties can be computed with their latitude and longtitude retrieved from U.S. Census Bureau\upcite{2}. The clusters we derived are labeled as Cluster-1, Cluster-2, ..., Cluster-10.
 \begin{figure}[H]
 	\centering
 	\includegraphics[scale=0.3]{./figures/0.png}
-	\caption{Clusters got after K-means, points with the same color belong to one cluster}
+	\caption{Clusters got after k-means, points with the same color belong to one cluster}
 	\label{Fig0}
 \end{figure}
 
@@ -145,7 +163,7 @@ In order to describe the dissemination and characteristics of the synthetic opio
 \section{Model Construction}
 \subsection{Identify Locations using Logistic Regression}
 \subsubsection{Model Establishment}
-With the K-means cluster analysis, we acquire data about the synthetic opioid and heroin events in ten clusters. It is clear to identify that the drug use levels in most areas are increasing. If drug use continues to grow at such speed, it will bring about numerous negative effects to the society when it exceeds an certain level, as mentioned in the Problem Background. Therefore, government’s relevant departments, including the Drug Enforcement Administration(DEA), will take corresponding measures to control the growing trend of drug use. However, when consumptions reach a high level, the growing rate in usage will reduce. And it is gradually increasing when consumptions are low.
+With the k-means cluster analysis, we acquire data about the synthetic opioid and heroin events in ten clusters. It is clear to identify that the drug use levels in most areas are increasing. If drug use continues to grow at such speed, it will bring about numerous negative effects to the society when it exceeds an certain level, as mentioned in the Problem Background. Therefore, government’s relevant departments, including the Drug Enforcement Administration(DEA), will take corresponding measures to control the growing trend of drug use. However, when consumptions reach a high level, the growing rate in usage will reduce. And it is gradually increasing when consumptions are low.
 
 The regular drug-use pattern is identical to the Logistic model of population growth, in which the natural growth rate of the population will be limited by the population. Similarly, the drug-use will be limited by many restrictions including social factors such as government control and natural factors such as population growth. Assuming that drug-use level could be affected by these factors and thus having a ceiling, it can be considered that the growth trend of synthetic opioid and heroin events are subordinated to the Logistic model. Here’s the Logistic model:
 \begin{equation}
@@ -234,12 +252,12 @@ What’s more, we use the logistic discrete equation to solve the coefficients o
 	\end{tabular}
 \end{table}
 
-\subsection{Iterative Lokta-Voltera Model to describe the spread and characteristics}
+\subsection{Iterative Lokta-Volterra Model to describe the spread and characteristics}
 In the last section 4.1, we construct Logistic Model to identify the possible locations where specific opioid use might have started. However, as the number of drug reports approaches the carrying capacity $N_{max}$, the Logistic Model become smooth and can’t provide more information about the changing trends. Therefore, in this section, we modify the dynamic Lotka-Volterra equations to model the interactions between different clusters.
 	
 The Lotka-Volterra equations are known as the predator-prey equations in a biological system of two (or more) species. In fact, the Lotka-Volterra equations can describe not only the predation relationships between species, but also the competition, parasitism even mutualism relationships. And we think the spread of the reported synthetic opioid and heroin incidents may have a mixed features, which meets the application conditions.
 
-For simplification, let $S_{1}$ and $S_{2}$ denote, respectively, Species 1 and Species 2. Let $u_{1}(t)$ and $u_{2}(t)$ denote, respectively, the measurement of $S_{1}$ and $S_{2}$ at time t. Let $a_{1}$ and $a_{2}$ denote the natural growth fate of $S_{1}$ and $S_{2}$, and $b_{1}$ and $b_{2}$, respectively, the influence factor of $S_{1}$ to the natural growth rate of $S_{1}$ and $S_{2}$. Similarly, here goes the $c_{1}$ and $c_{2}$. The Lotka-Voltera equations are non-linear, first-order differential equations defined as follows:
+For simplification, let $S_{1}$ and $S_{2}$ denote, respectively, Species 1 and Species 2. Let $u_{1}(t)$ and $u_{2}(t)$ denote, respectively, the measurement of $S_{1}$ and $S_{2}$ at time t. Let $a_{1}$ and $a_{2}$ denote the natural growth fate of $S_{1}$ and $S_{2}$, and $b_{1}$ and $b_{2}$, respectively, the influence factor of $S_{1}$ to the natural growth rate of $S_{1}$ and $S_{2}$. Similarly, here goes the $c_{1}$ and $c_{2}$. The Lotka-Volterra equations are non-linear, first-order differential equations defined as follows:
 \begin{gather}
 	u'_{1}(t) = u_{1}(t)(a_{1} + b_{1}u_{1}(t) + c_{1}u_{2}(t)) \label{equ41}\\
 	u'_{2}(t) = u_{2}(t)(a_{2} + b_{2}u_{2}(t) + c_{2}u_{2}(t))
@@ -646,8 +664,8 @@ Compared to the short-term policy, long-term policy could be some measures that 
 
 \subsection{Weaknesses}
 \begin{itemize}
-	\item Although we use the K-means clustering algorithm to replace five states into areas represented by ten clusters in order to simplify data processing, the subsequent analysis must be based on the clusters’ data. Therefore, it can not be accurately analyzed and that is to say here’s a certain error.
-	\item Logistic regression model is suitable for most of the clusters data, but there are still 2~3 clusters which have decreasing trends. In the process of solving problems, we do not handle them by other models and also think that they will not exceed the threshold level. It seems kind of impractical.
+	\item Although we use the k-means clustering algorithm to replace five states into areas represented by ten clusters in order to simplify data processing, the subsequent analysis must be based on the clusters’ data. Therefore, it can not be accurately analyzed and that is to say here’s a certain error.
+	\item Logistic regression model is suitable for most of the clusters data, but there are still 2 to 3 clusters which have decreasing trends. In the process of solving problems, we do not handle them by other models and also think that they will not exceed the threshold level. It seems kind of impractical.
  \end{itemize}
 
 \begin{thebibliography}{99}
@@ -671,7 +689,7 @@ Compared to the short-term policy, long-term policy could be some measures that 
 \section{The Source Codes}		% 附录标题可以自行修改
 
 
-This python program implements K-means clustering.
+This python program implements k-means clustering.
 \lstinputlisting[language={python}, caption=\texttt{k-means.py}]{../code/k-means.py}
 % \inputpython{../code/k-means.py}{0}{68}
 
