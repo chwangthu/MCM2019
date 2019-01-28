@@ -27,7 +27,7 @@
 \newpage
 
 \section{Introduction}
-\subsection{Problem Background}
+\subsection{Background}
 Opioids, no matter synthetic ones or non-synthetic ones, play an significant role in our daily life. The proper utilization of opioids helps thousands of people get relieved from their pains. However, misuse of them can really destroy the society. Therefore, it is essential and urgent to gain a better understanding of opioids' spread and influencing factors.
 
 Recent years have witnessed the tremendous growth of opioids cases. How this trend will develop remains an national concern. With data of annual drug use and socio-economic factors in five U.S. states over the past few years, we perform data mining and construct a model to figure out the pattern of opioids use and what contributes to it.
@@ -387,11 +387,11 @@ Fig. \ref{Fig5} depicts the trend of opioid and heroin incidents in the 10 clust
 	\label{Fig5}
 \end{figure}
 
-According to the logistic model, we have obtained tolerances for drug-use levels in each region, which we approximately consider as the drug threshold level for each region, making an analogy with the maximum environmental capacity in biology. If drug usage exceeds the threshold level, the trend of drug use in this region will be uncontrollable and may create an unpredictable social crisis.
+According to the logistic model, we have obtained tolerances for drug-use levels in each region, which we approximately consider as the drug threshold level for each region, making an analogy with the maximum environmental capacity in biology. If drug usage exceeds the threshold level, the drug use in this region might become uncontrollable thus resulting in an unprecedented social crisis.
 
-In the above figure, we know that the trend of drug use in some areas is decreasing year by year or stable at a relatively low value. So it can be considered that the drug usage will not exceed its threshold level for the next few years, and the government does not need to worry about these areas. Here we will no longer make these curves. Now we need to study several clusters with clearly upward trends, and we need to find the intersection of the drug threshold level and the rising curve in order to make a judgement about whether government should take actions. The following figures also clearly reflect this feature.
+In the above figure, we know that the number of drug use in some areas is decreasing annually or being stable at a relatively low value. So it can be considered that drug usage will not exceed its threshold level in the next few years, and the government does not need to be concerned about these areas, hence we no longer make their curves. Now we focus on clusters with clearly upward drug-use trends. The first goal is to find the intersection of the drug threshold level and the rising curve in order to make a judgement on whether government should take actions. The following figures clearly demonstrates what has been mentioned.
 
-We can see that both Cluster-2 and 7 exceed the drug threshold levels. Cluster-2 will reach the threshold level 2018, which is said that government should take measures as much as quickly to prevent this area’s problems. And Cluster-7 will reach the level few years later, around 2021. Also, it shows that their trends in the following years are still increasing. At this time, it can be considered that drug use may be uncontrolled in these two regions when the levels are exceeded. Thus, the government needs to adopt measures in advance and pay attention to the growth of drug use levels in these two areas earlier.
+We can see that both Cluster-2 and 7 exceed the drug threshold levels. Cluster-2 will reach the threshold level 2018, which indicates that local government should take measures as much quickly as possible. And Cluster-7 will reach the threshold a few years later, around 2021. Also, it shows that the rising trend still maintains for the following years. So it can be considered that drug use may be uncontrolled in these two regions when the levels are exceeded. Thus, it is urgent for the government to adopt effective measures in advance.
 
 \begin{figure}[H]
 	\centering %图片全局居中
@@ -465,6 +465,82 @@ The first three equilibrium points contain the coordinate 0, which contrasts the
 
 The matrix $\bar B$ may not satisfy the corresponding conditions.
 
+\subsection{Modified Iterative Lotka-Volterra Model}
+In the last section, we build the Iterative Lotka-Volterra Model(LVM) to research the interactions between different clusters. However, the LVM can only be applied in a short range of time. In this section, we modify the LVM by adding attribute characters from the U.S. Census socio-economic data.
+
+The U.S. Census socio-economic data has nearly 500 more variables ranging from 2010 to 2016, which is too large to use. In the data process section, we use entropy weight method to further classify variables into 15 factors. The time series of 15 factors in Cluster 1 are listed as follows.
+
+\begin{figure}[H]
+	\centering %图片全局居中
+	%并排几个图，就要写几个minipage
+	\begin{minipage}[b]{0.48\textwidth} %所有minipage宽度之和要小于1，否则会自动变成竖排
+		\centering %图片局部居中
+		\includegraphics[scale=0.8]{./figures/9.png} %此时的图片宽度比例是相对于这个minipage的，不是全局
+		\caption{}
+		\label{Fig9}
+	\end{minipage}
+	\begin{minipage}[b]{0.48\textwidth} %所有minipage宽度之和要小于1，否则会自动变成竖排
+		\centering %图片局部居中
+		\includegraphics[scale=0.8]{./figures/10.png}%此时的图片宽度比例是相对于这个minipage的，不是全局
+		\caption{}
+		\label{Fig10}
+	\end{minipage}
+\end{figure}
+
+As we can see from Fig. \ref{Fig9}, part of those factors are strongly correlated. So certain factors can provide as much information as we need in the model construction. By further process, we find factors 'PLACE OF BIRTH' of Cluster-1 has a similar trend with the Drug Reports of Cluster-1. These findings inspire us that certain factors may help to forecast the trend of Drug Reports. In order to select the best factors to forecast, we calculator the correlation coefficient between every 15 factors and every 10 clusters. The results are put in the Appendix.
+
+Fig. \ref{Fig11} demonstrates the major influential factors. We observe that the influencing factors differ by regions, based on the locations of five states and ten clusters in the map. \ref{Fig11}. So we categorize these influencing factors on a geographical basis, which are presented in \ref{Fig11}.
+
+It is obvious that immigration plays a decisive role in Cluster-2, 8, and 9 near the East Coast. This is not difficult to understand, because many immigrants started locating in the east coast of the United States ever since Columbus discovered the Americas. The immigration culture and degree also determine their preference and use of drugs to some extent. At the same time, the drug-use level in the Washington area is related to veterans, which can be speculated in the light of the fact that military power concentrates in Washington, DC. 
+
+The main influence factor in the central region is the level of education. Since there are various institutions of high level in these regions (Cluster-1, 5, 7, 10), we can conclude that education is also closely related to drug use. As forwestern regions of the five states, family composition could be the main reason. Based on common knowledge, there is a certain relationship between drug crime, family background and growing environment, the result is convincing.
+
+\begin{figure}[H]
+	\centering
+	\includegraphics[scale=0.7]{./figures/11.png}
+	\caption{Major Influential Factors}
+	\label{Fig11}
+\end{figure}
+
+Since the Iterative Lotka-Volterra Model doesn’t take the attribute into account, we can modify the model by adding attribute characters from socio-economic factors. For each Cluster, we select the factors most correlated to drug reports (including positive and negative correlation coefficient). And build linear regression model to calculate the change rate of $u_k(t)$ as follows:
+
+\begin{equation}
+	\begin{aligned}
+		\frac{du_{k}(t)}{dt} &= a + bX_{t}^{k} \\
+		&=h(X_{t}^{k}) \\
+		k &= 1,2,...,9
+	\end{aligned}
+	\label{4.7}
+\end{equation}
+
+In the LVM, we calculate the change rate of $u_{k}(t)$ by
+\begin{equation}
+	\begin{aligned}
+	\frac{du_{k}(t)}{dt} &= u_{k}(t-1)(a_{k} + \sum_{j=1}^{9}b_{kj}u_{k}(t-1)) \\
+	&=f(u_{k}(t-1))
+	\end{aligned}
+	\label{4.8}
+\end{equation}
+By formula \ref{4.7}, we get the change rate of $u_k(t)$ by using the attributes of Cluster-k. By formula \ref{4.8}, we get the change rate of $u_k(t)$ by spreading the interactions between different Clusters. To combine both of the influences, we modify the change rate of $u_k (t)$ by taking the weighted average of two results.
+
+\begin{equation}
+	\frac{du_{k}(t)}{dt} = \lambda(t)h(X_{t}^{k}) + (1-\lambda(t))f(u_{k}(t-1))
+\end{equation}
+
+Because in the short run, the interactions among different clusters remain stable. While in the long run, the macro attributes are more reliable to forecast. Hence the weighted parameter $\lambda(t)$ should satisfy the following properties. 
+\begin{equation}
+	\lambda(t) \in (0, 1) \lambda'(t) > 0
+\end{equation}
+where $\lambda(t) = \frac{ln(t)}{1+ln(t)}$.
+
+By calculating, we get the next 50 years of drug reports in different clusters. 
+\begin{figure}[H]
+	\centering
+	\includegraphics[scale=0.7]{./figures/12.png}
+	\caption{}
+	\label{Fig12}
+\end{figure}
+
 \section{Strengths and Weaknesses}
 \subsection{Strengths}
 \begin{itemize}
@@ -485,12 +561,18 @@ The matrix $\bar B$ may not satisfy the corresponding conditions.
 \bibitem{4}DrugBank. \texttt{https://www.drugbank.ca/drug}
 \end{thebibliography}
 
-
-% ==============以下为附录内容，如您的论文中不需要程序附录请自行删除====================
 \clearpage
-\begin{subappendices}						% 附录环境
-\section*{Apendix: The Source Codes}		% 附录标题可以自行修改
-\addcontentsline{toc}{section}{Appendix}  	% 将附录内容加入到目录中
+\begin{appendices}
+% \addcontentsline{toc}{section}{Appendix}  	% 将附录内容加入到目录中
+\section{Figures}
+\begin{figure}[H]
+	\centering
+	\includegraphics[scale=0.5]{./figures/a1.png}
+	\caption{coefficients between Factors and Clusters}
+\end{figure}
+
+\section{The Source Codes}		% 附录标题可以自行修改
+
 
 This python program implements k-means clustering.
 \lstinputlisting[language={python}, caption=\texttt{k-means.py}]{../code/k-means.py}
@@ -523,8 +605,7 @@ end
 \textbf{\textcolor[rgb]{0.98,0.00,0.00}{Input matlab source:}}
 % \lstinputlisting[language=Matlab]{../code/matlab-test.m}
 
-\end{subappendices}
-% =================================================================================
+\end{appendices}
 
 
 
